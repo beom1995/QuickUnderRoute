@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         webView = findViewById(R.id.webView)
 
         webView.apply {
@@ -53,6 +52,8 @@ class MainActivity : AppCompatActivity() {
                     return true
                 }
             }
+
+//            webView.addJavascriptInterface(WebAppInterface(this), "Android")
 
 
             //WebView 설정모음
