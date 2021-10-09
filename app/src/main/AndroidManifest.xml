@@ -18,6 +18,8 @@
         </activity>
     </application>
 
+    //yeeun
+
     <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
