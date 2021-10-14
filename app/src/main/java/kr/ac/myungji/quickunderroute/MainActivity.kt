@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import android.widget.ProgressBar
+import kr.ac.myungji.quickunderroute.room.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
@@ -115,6 +116,5 @@ class MainActivity : AppCompatActivity() {
             dialog?.show()
         }
     }
-
 
 }
