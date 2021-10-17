@@ -3,30 +3,32 @@ package kr.ac.myungji.quickunderroute
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
-import android.graphics.Bitmap
 import android.net.http.SslError
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Message
-import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
-import android.widget.ProgressBar
 import androidx.room.Room
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
-    var helper: RoomHelper? = null
+    var helper: AppDatabase? = null
 
-    @SuppressLint("SetJavaScriptEnabled")
+//    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         webView = findViewById(R.id.webView)
 
         //RoomHelper 설정
-        helper = Room.databaseBuilder(this, RoomHelper::class.java, "subwayInfo")
-            .allowMainThreadQueries().build()
+/*        helper = Room.databaseBuilder(this, RoomHelper::class.java, "subwayInfo")
+            .allowMainThreadQueries()
+            .build()
+  */
+        helper = Room.databaseBuilder(this, AppDatabase::class.java, "subwayInfo")
+            .createFromAsset("subwayInfo.db")
+            .build()
 
 
 
