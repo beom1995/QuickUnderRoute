@@ -2,15 +2,12 @@ package kr.ac.myungji.quickunderroute
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "EDGE_TB")
+@Entity(primaryKeys = ["src", "dstn"], tableName = "EDGE_TB")
 class RoomEdge {
-    @PrimaryKey(autoGenerate = false)
     @ColumnInfo
     var src: Int = 0
 
-    @PrimaryKey(autoGenerate = false)
     @ColumnInfo
     var dstn: Int = 0
 
@@ -30,5 +27,4 @@ class RoomEdge {
         this.distanceM = distanceM
         this.fareWon = fareWon
     }
-
 }

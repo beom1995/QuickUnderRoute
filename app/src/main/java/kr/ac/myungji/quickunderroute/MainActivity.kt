@@ -12,16 +12,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import android.widget.ProgressBar
-import kr.ac.myungji.quickunderroute.room.databinding.ActivityMainBinding
+import androidx.room.Room
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
+    var helper: RoomHelper? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         webView = findViewById(R.id.webView)
+
+        //RoomHelper 설정
+        helper = Room.databaseBuilder(this, RoomHelper::class.java, "subwayInfo")
+            .allowMainThreadQueries().build()
+
+
 
         webView.apply {
             webViewClient = WebViewClientClass() // 클릭시 새창 안뜨게
