@@ -1,68 +1,51 @@
 package kr.ac.myungji.quickunderroute
 
 import java.util.*
+import kotlin.Comparator
 import kotlin.collections.ArrayList
 
-private lateinit var arr: ArrayList<ArrayList<Node>>
-private lateinit var distance: IntArray
-private lateinit var vis: BooleanArray
-private val queue = PriorityQueue<Node>()
-private const val INF = 1000000000
+private const val INF: Int = 1000000000     // 값이 무한대(infinity)라 가정
 
 var helper: AppDatabase? = null
 
 class RouteComputing {
+    private val edgeList: List<RoomEdge>? = helper?.roomEdgeDao()?.getAll()
+    private val stationList: List<RoomStation>? = helper?.roomStationDao()?.getAll()
+    private var totalCost: Int = 0
+    private lateinit var bestRoute: MutableList<RoomEdge>
 
-//    private lateinit var st: StringTokenizer
+    // mode는 시간0, 거리1, 요금2
+    fun dijkstra(mode: Int, src: Int, dstn: Int) {
+        lateinit var queue: MutableList<RoomEdge>
 
-//    private val edge: ArrayList<RoomEdge>() = helper?.RoomEdgeDAO()?.getAll()?
- //   private val station?: ArrayList<RoomStation>() = null
-
-    private fun main() {
-//        val br = BufferedReader(InputStreamReader(System.`in`))
-//        val bw = BufferedWriter(OutputStreamWriter(System.out))
-
-//        st = StringTokenizer(br.readLine())
-//        val n = st.nextToken().toInt()
-//        val e = st.nextToken().toInt()
-
-//        arr = ArrayList()
-//        for (i in 0 until n) arr.add(ArrayList())
-/*
-        distance = IntArray(n) { INF }
-        vis = BooleanArray(n)
-*/
-//        st = StringTokenizer(br.readLine())
-//        val k = st.nextToken().toInt() - 1
-/*
-        for (i in 0 until e) {
-            st = StringTokenizer(br.readLine())
-            val u = st.nextToken().toInt()-1
-            val v = st.nextToken().toInt()-1
-            val w = st.nextToken().toInt()
-            arr[u].add(Node(v, w ))
-        }
-*/
-//        dijkstra(k)
-/*
-        distance.forEach {
-            if (it == INF) {
-                bw.write("INF")
-                bw.write("\n")
-            } else {
-                bw.write(it.toString())
-                bw.write("\n")
+        val comparator: Comparator<RoomEdge>? by lazy {
+            when(mode) {
+                1 -> MinEdgeByTime()
+                2 -> MinEdgeByDistance()
+                3 -> MinEdgeByFare()
+                else -> null
             }
         }
-        bw.flush()
-        bw.close()
 
- */
-    }
+        for(n in 0..edgeList?.size!!) {
+            if(edgeList[n].src == src){
+                queue.add(edgeList[n])
+            }
+        }
 
-    private fun dijkstra(start: Int) {
-        distance[start] = 0 // 시작 거리는 0
-        queue.add(Node(start, 0)) // 시작 노드를 큐에 넣어줍니다
+        if(queue.isNotEmpty()){
+            Collections.sort(queue, comparator)
+            bestRoute.add(queue[0])
+        }else{
+            // 경로 없음
+        }
+
+
+        for(n in 0..edgeList?.size!!) {
+            if(edgeList[n].src == src){
+                totalCost += list[].    queue.add(edgeList[n])
+
+        }
 
         while (queue.isNotEmpty()) {
             val curIndex = queue.peek().index  // 현재 노드 인덱스
@@ -72,7 +55,7 @@ class RouteComputing {
             if (distance[curIndex] < curDist) continue // 탐색 시간을 줄이기 위해
             // 현재 거리가 현재 노드까지의 거리보다 작으면 탐색 중단
 
-            for (i in 0 until arr[curIndex].size) { // 연결된 노드들 탐색
+            for (i in 0 until stationList[].size) { // 연결된 노드들 탐색
                 val nextIndex = arr[curIndex][i].index
                 val nextDist = curDist + arr[curIndex][i].dist
 
@@ -80,15 +63,7 @@ class RouteComputing {
                     distance[nextIndex] = nextDist
                     queue.add(Node(nextIndex, nextDist))
                 }
-
             }
         }
-
     }
-
-
-}
-
-data class Node(val index: Int, val dist: Int) : Comparable<Node> {
-    override fun compareTo(other: Node): Int = dist-other.dist
 }

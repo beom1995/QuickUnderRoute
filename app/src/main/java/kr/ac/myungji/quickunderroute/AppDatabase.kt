@@ -9,13 +9,6 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [RoomStation::class, RoomEdge::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
-
-
     abstract fun roomEdgeDao(): RoomEdgeDAO
     abstract fun roomStationDao(): RoomStationDAO
 }
-/*
-Room.databaseBuilder(appContext, AppDatabase.class, "subwayInfo.db")
-.createFromAsset("database/myapp.db")
-.build()
-*/
