@@ -10,15 +10,26 @@ import android.os.Message
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.room.Room
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
     var helper: AppDatabase? = null
 
+
 //    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+
+        //var items = //데이터 베이스 연결
+        var autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
+        var adapter= ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, items)
+        autoCompleteTextView.setAdapter(adapter)
+
         webView = findViewById(R.id.webView)
 
         //RoomHelper 설정
