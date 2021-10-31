@@ -7,30 +7,24 @@ import android.net.http.SslError
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Message
+import android.util.Log
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.room.Room
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
-    var helper: AppDatabase? = null
+    var dbHelper: AppDatabase? = null
 
-//    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        webView = findViewById(R.id.webView)
+        webView = findViewById(R.id.webView)        // html로 UI를 구현하기 위한 요소
 
-        //RoomHelper 설정
-/*        helper = Room.databaseBuilder(this, RoomHelper::class.java, "subwayInfo")
-            .allowMainThreadQueries()
-            .build()
-  */
-        helper = Room.databaseBuilder(this, AppDatabase::class.java, "subwayInfo")
-            .createFromAsset("subwayInfo.db")
-            .build()
+        dbHelper = AppDatabase.getInstance(this)
 
-
+        RouteComputing().dijkstra(101,null,307)
 
         webView.apply {
             webViewClient = WebViewClientClass() // 클릭시 새창 안뜨게
@@ -78,9 +72,8 @@ class MainActivity : AppCompatActivity() {
             settings.domStorageEnabled = true
             settings.displayZoomControls = true
         }
-        webView.loadUrl("file:///android_asset/www/subwayMap.html")
 
-
+        webView.loadUrl("file:///android_asset/UI/subwayMap.html")
     }
 
     //웹뷰에서 홈페이지를 띄웠을때 새창이 아닌 기존창에서 실행이 되도록 아래 코드를 넣어준다.
