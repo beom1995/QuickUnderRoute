@@ -28,7 +28,7 @@
 
     #legend
     {
-        float: left;
+        float: right;
         width: 250px;
         height:400px;
     }
@@ -50,43 +50,188 @@
     </style>
 </head>
 <body>
-    <div class="subway-map" data-columns="12" data-rows="10" data-cellSize="40" data-legendId="legend" data-textClass="text" data-gridNumbers="true" data-grid="false" data-lineWidth="8">
-        <ul data-color="#36AEFF" data-label="jQuery Widgets">          
-            <li data-coords="2,2" data-marker="interchange"><a href="http://jqueryui.com/demos/accordion/">Accordion</a></li>  
-            <li data-coords="4,2"><a href="http://jqueryui.com/demos/autocomplete/"><a href="http://jqueryui.com/demos/autocomplete/">Auto\ncomplete</a></li>  
-            <li data-coords="5,3" data-dir="E"></li>  
-            <li data-coords="5,7" data-marker="@station" data-labelPos="W"><a href="http://jqueryui.com/demos/slider/">Slider</a></li> <!-- marker-only node -->  
-            <li data-coords="6,4" data-dir="S" data-marker="interchange" data-markerInfo="h5"><a href="http://jqueryui.com/demos/datepicker/">Date\npicker</a></li>  
-            <li data-coords="7,4"></li>  
-            <li data-coords="7.15,8" data-marker="@station" data-labelPos="E"><a href="http://jqueryui.com/demos/dialog/">Dialog</a></li>  <!-- marker-only node, moved to the right by 0.15 -->
-            <li data-coords="8,3" data-dir="E"></li>  
-            <li data-coords="8,2"></li>  
-            <li data-coords="9,1" data-dir="N"></li>  
-            <li data-coords="10,2" data-dir="E" data-marker="interchange" data-labelPos="E"><a href="http://jqueryui.com/demos/button/">Button</a></li>  
-            <li data-coords="10,5"></li>  
-            <li data-coords="9,6" data-dir="S" data-marker="station"><a href="http://jqueryui.com/demos/progressbar/">Progress\nbar</a></li>  
-            <li data-coords="6,9"></li>  
-            <li data-coords="5,8" data-dir="W"></li>  
-            <li data-coords="5,7"></li>  
-            <li data-coords="4,6" data-dir="N"></li>  
-            <li data-coords="2,6"><a href="http://jqueryui.com/demos/tabs/">Tabs</a></li>  
-        </ul>
+<div class="subway-map" data-columns="19" data-rows="15" data-cellSize="40" data-legendId="legend" data-textClass="text" data-gridNumbers="true" data-grid="false" data-lineWidth="8">
 
-        <ul data-color="#FF7936 " data-label="jQuery Interactions" data-shiftCoords="0,-1" data-outline="true" data-dotted="true">      
-            <li data-coords="2,6"></li> 
-            <li data-coords="2,5.9" data-marker="@interchange"> </li> <!-- marker-only node, moved up by 0.10 -->
-            <li data-coords="5,6" data-marker="@station" data-labelPos="N"><a href="http://jqueryui.com/demos/selectable/">Selectable</a></li>  
-            <li data-coords="6,6"></li>  
-            <li data-coords="7,3" data-marker="@station" data-labelPos="W"><a href="http://jqueryui.com/demos/resizeable/">Resizeable</a></li>  
-            <li data-coords="7,5" data-dir="E" data-marker="station" data-labelPos="E"><a href="http://jqueryui.com/demos/droppable/">Droppable</a></li>  
-            <li data-coords="7,1" data-marker="interchange" data-labelPos="W"><a href="http://jqueryui.com/demos/draggable/">Draggable</a></li>  
-        </ul>
+    <!--1호선-->
+    <ul data-color="#ff4747" data-label="1호선">
+        <li data-coords="4, 7"></li>
+        <li data-coords="3, 7"></li>
+        <li data-coords="2,8" data-dir="W" data-labelPos="W">101</li>
+        <li data-coords="2, 9" data-labelPos="W">102</li>
+        <li data-coords="2, 10" data-labelPos="W">103</li>
+        <li data-coords="2,11" data-labelPos="W">104</li>
+        <li data-coords="2, 12" data-labelPos="W">105</li>
+        <li data-coords="3, 13" data-dir="S">106</li>
+        <li data-coords="4, 13">107</li>
+        <li data-coords="5, 13">108</li>
+        <li data-coords="6, 13">109</li>
+        <li data-coords="7, 13">110</li>
+        <li data-coords="8, 13">111</li>
+        <li data-coords="9, 13">112</li>
+        <li data-coords="10, 13">113</li>
+        <li data-coords="11, 12" data-dir="E" data-labelPos="E">114</li>
+        <li data-coords="11, 11" data-labelPos="NE">115</li>
+        <li data-coords="11, 10" data-dir="E" data-labelPos="SW">116</li>
+        <li data-coords="11, 9" data-labelPos="E">117</li>
+        <li data-coords="11, 8" data-labelPos="E">118</li>
+        <li data-coords="10, 7"></li>
+        <li data-coords="9, 7" data-labelPos="NE">119</li>
+        <li data-coords="8, 7">120</li>
+        <li data-coords="7, 7" data-labelPos="NW">121</li>
+        <li data-coords="6, 7" data-labelPos="NW">122</li>
+        <li data-coords="4, 7" data-labelPos="NW">123</li>
+    </ul>
 
-    </div>
-    <div id="legend"></div>
-    
 
-    <script type="text/javascript">
+    <!--2호선-->
+    <ul data-color="#ff8e45" data-label="2호선">
+        <li data-coords="2,8" data-labelPos="W"></li>
+        <li data-coords="2,6" data-labelPos="W">201</li>
+        <li data-coords="2,5" data-labelPos="W">202</li>
+        <li data-coords="2,4" data-labelPos="W">203</li>
+        <li data-coords="2,3" data-labelPos="W">204</li>
+        <li data-coords="2,2" data-labelPos="N">205</li>
+        <li data-coords="3,2" data-labelPos="N">206</li>
+        <li data-coords="4,2" data-labelPos="N">207</li>
+        <li data-coords="5,2" data-labelPos="N">208</li>
+        <li data-coords="6,2" data-labelPos="N">209</li>
+        <li data-coords="7,2" data-labelPos="N">210</li>
+        <li data-coords="9,2" data-labelPos="N">211</li>
+        <li data-coords="10,2" data-labelPos="N">212</li>
+        <li data-coords="12,2" data-labelPos="N">213</li>
+        <li data-coords="13,2" data-labelPos="N">214</li>
+        <li data-coords="14,2" data-labelPos="N">215</li>
+        <li data-coords="15,2" data-labelPos="N">216</li>
+        <li data-coords="17,2" data-labelPos="N">217</li>
+    </ul>
+
+    <!--3호선-->
+    <ul data-color="#ffbf4a" data-label="3호선">
+        <li data-coords="4,2" data-labelPos="W"></li>
+        <li data-coords="4,3" data-labelPos="W">301</li>
+        <li data-coords="4,4" data-labelPos="W">302</li>
+        <li data-coords="4,5" data-labelPos="NW">303</li>
+        <li data-coords="4,6" data-labelPos="W">304</li>
+        <!--<li data-coords="4,7"></li> ?-->
+        <li data-coords="4,9" data-labelPos="W">305</li>
+        <li data-coords="4,10" data-labelPos="W">306</li>
+        <li data-coords="4,11" data-labelPos="NW">307</li>
+        <li data-coords="4,12" data-labelPos="W">308</li>
+        <li data-coords="4,13" data-labelPos="W"></li>
+    </ul>
+
+    <!--4호선-->
+    <ul data-color="#b7f35a" data-label="4호선">
+        <li data-coords="2, 11"></li>
+        <li data-coords="3, 11">401</li>
+        <li data-coords="5, 11">402</li>
+        <li data-coords="6, 11" data-labelPos="NW">403</li>
+        <li data-coords="7, 11">404</li>
+        <li data-coords="8, 11">405</li>
+        <li data-coords="9, 11" data-labelPos="NE">406</li>
+        <li data-coords="10, 11">407</li>
+        <li data-coords="12, 11">408</li>
+        <li data-coords="13, 11" data-labelPos="NE">409</li>
+        <li data-coords="14, 11">410</li>
+        <li data-coords="15, 11">411</li>
+        <li data-coords="15, 10" data-labelPos="NE">412</li>
+        <li data-coords="15, 9" data-labelPos="E">413</li>
+        <li data-coords="15, 8" data-labelPos="E">414</li>
+        <li data-coords="15, 6" data-labelPos="E">415</li>
+        <li data-coords="15, 5" data-labelPos="NE">416</li>
+        <li data-coords="15, 3" data-labelPos="NE">417</li>
+        <li data-coords="15, 2"></li>
+    </ul>
+
+
+    <!--5호선-->
+    <ul data-color="#6aebad" data-label="5호선">
+        <li data-coords="6,2" data-labelPos="W"></li>
+        <li data-coords="6,3" data-labelPos="W">501</li>
+        <li data-coords="6,4" data-labelPos="W">502</li>
+        <li data-coords="6,5" data-labelPos="NW">503</li>
+        <li data-coords="6,6" data-labelPos="W">504</li>
+        <!--<li data-coords="6,7"></li>?-->
+        <li data-coords="6,9" data-labelPos="W">505</li>
+        <li data-coords="6,10" data-labelPos="W">506</li>
+        <!--<li data-coords="6,11"></li>?-->
+        <li data-coords="6,12" data-labelPos="W">507</li>
+        <li data-coords="6,13" data-labelPos="W"></li>
+    </ul>
+
+    <!--6호선-->
+    <ul data-color="#66dff4" data-label="6호선">
+        <li data-coords="8, 3"></li>
+        <li data-coords="7, 4" data-dir="W"></li>
+        <li data-coords="7, 5" data-labelPos="NW">601</li>
+        <li data-coords="7, 6" data-labelPos="W">602</li>
+        <li data-coords="7, 9" data-labelPos="W">603</li>
+        <li data-coords="8, 10" data-dir="S">604</li>
+        <li data-coords="9, 10" data-labelPos="NW">605</li>
+        <li data-coords="10, 10" data-labelPos="N">606</li>
+        <li data-coords="12, 10" data-labelPos="N">607</li>
+        <li data-coords="13, 10" data-labelPos="SW">608</li>
+        <li data-coords="14, 10" data-labelPos="N">609</li>
+        <li data-coords="16, 10">610</li>
+        <li data-coords="17, 9" data-dir="E" data-labelPos="E">611</li>
+        <li data-coords="17, 8" data-labelPos="E">612</li>
+        <li data-coords="17, 6" data-labelPos="E">613</li>
+        <li data-coords="17, 5" data-labelPos="E">614</li>
+        <li data-coords="17, 4" data-labelPos="E">615</li>
+        <li data-coords="16, 3">616</li>
+        <li data-coords="14, 3">617</li>
+        <li data-coords="13, 3">618</li>
+        <li data-coords="12, 3">619</li>
+        <li data-coords="10, 3">620</li>
+        <li data-coords="9, 3" data-labelPos="NE">621</li>
+        <li data-coords="8, 3">622</li>
+    </ul>
+
+
+    <!--7호선-->
+    <ul data-color="#738cfc" data-label="7호선">
+        <li data-coords="2,5"></li>
+        <!--<li data-coords="4,5"></li>?-->
+        <!--<li data-coords="6,5"></li>?-->
+        <!--<li data-coords="7,5"></li> ?-->
+        <li data-coords="8,5">701</li>
+        <li data-coords="9,5" data-labelPos="NE">702</li>
+        <li data-coords="10,5">703</li>
+        <li data-coords="12,5">704</li>
+        <li data-coords="13,5" data-labelPos="NE">705</li>
+        <li data-coords="14,5">706</li>
+        <!--<li data-coords="15,5"></li>?-->
+        <li data-coords="16,5">707</li>
+        <li data-coords="17,5"></li>
+    </ul>
+
+    <!--8호선-->
+    <ul data-color="#9e77f8" data-label="8호선">
+        <li data-coords="10, 13"></li>
+        <li data-coords="12, 13">801</li>
+        <li data-coords="13, 13">802</li>
+        <li data-coords="13, 12" data-labelPos="E">803</li>
+        <li data-coords="13, 9" data-labelPos="E">804</li>
+        <li data-coords="13, 8" data-labelPos="E">805</li>
+        <li data-coords="13, 6" data-labelPos="E">806</li>
+        <li data-coords="13,2"></li>
+    </ul>
+
+    <!--9호선-->
+    <ul data-color="#f387c1" data-label="9호선">
+        <li data-coords="9, 13"></li>
+        <li data-coords="9, 12" data-labelPos="E">901</li>
+        <li data-coords="9, 9" data-labelPos="E">902</li>
+        <li data-coords="9, 6" data-labelPos="E">903</li>
+        <li data-coords="9, 4" data-labelPos="E">904</li>
+        <li data-coords="9,2"></li>
+    </ul>
+
+</div>
+<div id="legend"></div>
+
+
+<script type="text/javascript">
         $(".subway-map").subwayMap({ debug: true });
     </script>
 </body>
