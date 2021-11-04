@@ -3,23 +3,31 @@ package kr.ac.myungji.quickunderroute
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.net.http.SslError
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Message
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.room.Room
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
     var dbHelper: AppDatabase? = null
 
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         webView = findViewById(R.id.webView)        // html로 UI를 구현하기 위한 요소
 
         dbHelper = AppDatabase.getInstance(this)
@@ -74,6 +82,37 @@ class MainActivity : AppCompatActivity() {
         }
 
         webView.loadUrl("file:///android_asset/UI/subwayMap.html")
+
+
+        //자동완성
+        var items = arrayOf("101","102","103","201","202","301")//임시 데이터
+        var autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
+        var adapter = ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, items)
+        autoCompleteTextView.setAdapter(adapter)
+
+        //메뉴
+        var layMenu:LinearLayout = findViewById(R.id.LayMenu)
+        var btnMenu:Button = findViewById(R.id.BtnMenu)
+        var btnNum:Boolean = true;
+
+        btnMenu.setOnClickListener {
+            if(btnNum == true) {
+                layMenu.visibility = View.VISIBLE
+                btnNum = false;
+            }else{
+                layMenu.visibility = View.INVISIBLE
+                btnNum = true;
+            }
+        }
+
+        //즐겨찾기 화면 전환
+        var btnFav:Button = findViewById(R.id.BtnFav)
+
+        btnFav.setOnClickListener {
+            val intent = Intent(this, FavoritesActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     //웹뷰에서 홈페이지를 띄웠을때 새창이 아닌 기존창에서 실행이 되도록 아래 코드를 넣어준다.

@@ -17,16 +17,61 @@
             android:completionThreshold="2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="9"
             android:hint="역 검색" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="즐겨찾기"/>
+            android:id="@+id/BtnOK"
+            android:layout_weight="1"
+            android:text="검색"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/BtnMenu"
+            android:layout_weight="1"
+            android:text="메뉴"/>
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LayMenu"
+        android:visibility="invisible"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/BtnFav"
+            android:layout_weight="1"
+            android:text="즐겨찾기"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/BtnNotice"
+            android:layout_weight="1"
+            android:text="공지사항"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/BtnLost"
+            android:text="유실물 센터"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/BtnSet"
+            android:text="설정"/>
+
+    </LinearLayout>
 
     <WebView
         android:id="@+id/webView"
