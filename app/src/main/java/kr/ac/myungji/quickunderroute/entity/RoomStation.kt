@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 class RoomStation {
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "NO")
-    var no: Int
+    val no: Int
 
     @ColumnInfo(name = "LINE_NO")
     var lineNo: Int?

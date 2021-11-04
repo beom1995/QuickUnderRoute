@@ -19,7 +19,7 @@ class RouteComputing(db: AppDatabase?) {
     private val heap = PriorityQueue<RoomEdge>()
 
     private lateinit var vis: BooleanArray
-    private val queue = PriorityQueue<Node>()
+    private val queue = PriorityQueue<Node>()   // minheap을 이용
 
     fun dijkstra(src: Int, via: Int?, dstn: Int) {
         var curSrc = src

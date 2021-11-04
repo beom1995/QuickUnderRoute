@@ -6,10 +6,10 @@ import androidx.room.Entity
 @Entity(primaryKeys = ["SRC", "DSTN"], tableName = "EDGE_TB")
 class RoomEdge {
     @ColumnInfo(name = "SRC")
-    var src: Int = 0
+    val src: Int
 
     @ColumnInfo(name = "DSTN")
-    var dstn: Int = 0
+    val dstn: Int
 
     @ColumnInfo(name = "TIME_SEC")
     var timeSec: Int = 0
