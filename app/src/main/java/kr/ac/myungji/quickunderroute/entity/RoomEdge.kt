@@ -1,23 +1,23 @@
-package kr.ac.myungji.quickunderroute
+package kr.ac.myungji.quickunderroute.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 
-@Entity(primaryKeys = ["src", "dstn"], tableName = "EDGE_TB")
+@Entity(primaryKeys = ["SRC", "DSTN"], tableName = "EDGE_TB")
 class RoomEdge {
-    @ColumnInfo
+    @ColumnInfo(name = "SRC")
     var src: Int = 0
 
-    @ColumnInfo
+    @ColumnInfo(name = "DSTN")
     var dstn: Int = 0
 
-    @ColumnInfo
+    @ColumnInfo(name = "TIME_SEC")
     var timeSec: Int = 0
 
-    @ColumnInfo
+    @ColumnInfo(name = "DISTANCE_M")
     var distanceM: Int = 0
 
-    @ColumnInfo
+    @ColumnInfo(name = "FARE_WON")
     var fareWon: Int = 0
 
     constructor(src: Int, dstn: Int, timeSec: Int, distanceM: Int, fareWon: Int) {

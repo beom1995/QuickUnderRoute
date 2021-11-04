@@ -11,20 +11,39 @@ import android.util.Log
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.room.Room
+import kotlinx.coroutines.*
+import java.lang.Runnable
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
-    var dbHelper: AppDatabase? = null
+    private lateinit var job: Job
+    private var db: AppDatabase? = null
 
+
+    // MainActivity가 생성될 때
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        webView = findViewById(R.id.webView)        // html로 UI를 구현하기 위한 요소
+        webView = findViewById(R.id.webView)        // html로 UI를 구현하기 위해서 사용
 
-        dbHelper = AppDatabase.getInstance(this)
+        job = CoroutineScope(Dispatchers.IO).launch{
+            DatabaseCopier.copyAttachedDatabase(context = applicationContext)
+        }
 
-        RouteComputing().dijkstra(101,null,307)
+        runBlocking {
+            job.join()
+        }
+
+        db = DatabaseCopier.getAppDataBase(context = applicationContext)
+
+
+        val r = Runnable {
+            RouteComputing(db).dijkstra(101,null,307)
+        }
+
+        val thread = Thread(r)
+        thread.start()
 
         webView.apply {
             webViewClient = WebViewClientClass() // 클릭시 새창 안뜨게
@@ -76,6 +95,14 @@ class MainActivity : AppCompatActivity() {
         webView.loadUrl("file:///android_asset/UI/subwayMap.html")
     }
 
+
+    // MainActivity가 종료될 때
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
+    }
+
+    
     //웹뷰에서 홈페이지를 띄웠을때 새창이 아닌 기존창에서 실행이 되도록 아래 코드를 넣어준다.
     inner class WebViewClientClass : WebViewClient() {
         //페이지 이동
