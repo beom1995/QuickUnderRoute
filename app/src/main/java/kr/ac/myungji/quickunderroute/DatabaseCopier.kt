@@ -15,7 +15,7 @@ import java.io.IOException
 
 object DatabaseCopier {
     private val TAG = DatabaseCopier::class.java.simpleName
-    private const val DATABASE_NAME = "subwayInfo.db"
+    private const val DATABASE_NAME = "subwayDB.db"
     private var INSTANCE: AppDatabase? = null
 
 
