@@ -1,19 +1,13 @@
 package kr.ac.myungji.quickunderroute
 
 import android.util.Log
-import androidx.room.Room
+import kr.ac.myungji.quickunderroute.entity.RoomEdge
 import java.util.*
-import kotlin.Comparator
-import kotlin.collections.ArrayList
 
 private const val INF: Int = 1000000000     // 값이 무한대(infinity)라 가정
 
-class RouteComputing {
-    var helper: AppDatabase? = null
-
-    private val edgeList: List<RoomEdge>? = helper?.roomEdgeDao()?.getAll()     // 모든 edge
-    private val stationList: List<RoomStation>? = helper?.roomStationDao()?.getAll()     // 모든 station
-    private var totalCost: Int = 0
+class RouteComputing(db: AppDatabase?) {
+    private val edgeList: List<RoomEdge>? = db!!.roomEdgeDao().getAll()     // 모든 edge
     private lateinit var cost: IntArray
 
     // 최종 최적경로
@@ -24,17 +18,12 @@ class RouteComputing {
     // 계산 시 사용
     private val heap = PriorityQueue<RoomEdge>()
 
-    private lateinit var arr: ArrayList<ArrayList<Node>>
-    private lateinit var dist: IntArray
     private lateinit var vis: BooleanArray
     private val queue = PriorityQueue<Node>()
 
-
     fun dijkstra(src: Int, via: Int?, dstn: Int) {
- //       lateinit var queue: Array<Array<Int>>
         var curSrc = src
 
-//        for (i in 0..111) arr.add(ArrayList())
         cost = IntArray(910) { INF }
         vis = BooleanArray(111)
 
@@ -62,10 +51,12 @@ class RouteComputing {
                     }
                 }
             }
-            Log.d("dijstra", cost[dstn].toString())
+            Log.d("dijstra result", cost[dstn].toString())
         }
     }
 }
+
+
 data class Node(val index: Int, val cost: Int) : Comparable<Node> {
     override fun compareTo(other: Node): Int = cost-other.cost
 }
