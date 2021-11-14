@@ -18,6 +18,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.room.Room
 import kotlinx.coroutines.*
+import kr.ac.myungji.quickunderroute.entity.RoomStation
 import java.lang.Runnable
 
 class MainActivity : AppCompatActivity() {
@@ -25,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var job: Job
     private var db: AppDatabase? = null
 
-  
     // MainActivity가 생성될 때
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,9 +44,19 @@ class MainActivity : AppCompatActivity() {
 
         db = DatabaseCopier.getAppDataBase(context = applicationContext)
 
-
         val r = Runnable {
             RouteComputing(db).dijkstra(101,null,307)
+            val stationList: List<RoomStation>? = db!!.roomStationDao().getAll()
+
+            var arr1 = Array<Int>(112,{0})
+
+            if (stationList != null) {
+                for (i in stationList.indices) {
+                    arr1[i] = stationList[i].no
+                }
+            }
+            var items = arr1
+
         }
 
         val thread = Thread(r)
@@ -102,11 +112,14 @@ class MainActivity : AppCompatActivity() {
         webView.loadUrl("file:///android_asset/UI/subwayMap.html")
 
 
-        //자동완성
-        var items = arrayOf("101","102","103","201","202","301")//임시 데이터
+/*
+        var items = arrayOf("101","102","103","104")//arr1//임시 데이터
         var autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
         var adapter = ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, items)
         autoCompleteTextView.setAdapter(adapter)
+        */
+
+        var autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
 
         //메뉴
         var layMenu:LinearLayout = findViewById(R.id.LayMenu)
@@ -141,7 +154,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    
+
+
+
+
     //웹뷰에서 홈페이지를 띄웠을때 새창이 아닌 기존창에서 실행이 되도록 아래 코드를 넣어준다.
     inner class WebViewClientClass : WebViewClient() {
         //페이지 이동
