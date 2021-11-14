@@ -131,13 +131,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-    }
+        //유실물 화면 전환
+        var btnLost: Button = findViewById(R.id.BtnLost)
 
+        btnLost.setOnClickListener {
+            val intent = Intent(this, LostActivity::class.java)
+            startActivity(intent)
+        }
 
-    // MainActivity가 종료될 때
-    override fun onDestroy() {
-        job.cancel()
-        super.onDestroy()
     }
 
     
@@ -184,4 +185,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    // MainActivity가 종료될 때
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
+    }
 }

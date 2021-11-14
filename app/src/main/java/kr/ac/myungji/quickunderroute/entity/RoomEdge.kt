@@ -28,15 +28,3 @@ class RoomEdge {
         this.fareWon = fareWon
     }
 }
-
-class MinEdgeByTime: Comparator<RoomEdge> {
-    override fun compare(e1: RoomEdge, e2: RoomEdge): Int = e1.timeSec - e2.timeSec
-}
-
-class MinEdgeByDistance: Comparator<RoomEdge> {
-    override fun compare(e1: RoomEdge, e2: RoomEdge): Int = e1.distanceM - e2.distanceM
-}
-
-class MinEdgeByFare: Comparator<RoomEdge> {
-    override fun compare(e1: RoomEdge, e2: RoomEdge): Int = e1.fareWon - e2.fareWon
-}
