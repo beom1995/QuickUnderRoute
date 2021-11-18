@@ -1,10 +1,11 @@
-package kr.ac.myungji.quickunderroute
+package kr.ac.myungji.quickunderroute.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import kr.ac.myungji.quickunderroute.R
 
 class LostActivity : AppCompatActivity() {
     private lateinit var webView: WebView
@@ -21,7 +22,6 @@ class LostActivity : AppCompatActivity() {
         webView.webViewClient = WebViewClient()
 
         webView.settings.allowContentAccess = true
-        webView.settings.setAppCacheEnabled(true)
         webView.settings.domStorageEnabled = true
         webView.settings.useWideViewPort = true
 

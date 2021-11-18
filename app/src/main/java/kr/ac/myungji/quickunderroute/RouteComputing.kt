@@ -10,11 +10,6 @@ class RouteComputing(db: AppDatabase?) {
     private val edgeList: List<RoomEdge>? = db!!.roomEdgeDao().getAll()     // 모든 edge
     private lateinit var cost: IntArray
 
-//    // 최종 최적경로
-//    private lateinit var minTime: MutableList<RoomEdge>
-//    private lateinit var minDist: MutableList<RoomEdge>
-//    private lateinit var minFare: MutableList<RoomEdge>
-
     private lateinit var vis: BooleanArray
 
     // minheap을 이용하여 가장 적은 비용을 가진 경로를 계산
@@ -29,8 +24,6 @@ class RouteComputing(db: AppDatabase?) {
 
     fun dijkstra(src: Int, via: Int?, dstn: Int) {
         var curSrc = src
-
-
 
         vis = BooleanArray(111)
 
@@ -125,7 +118,6 @@ class RouteComputing(db: AppDatabase?) {
 
     }
 }
-
 
 data class Node(val index: Int, val cost: Int) : Comparable<Node> {
     override fun compareTo(other: Node): Int = cost-other.cost

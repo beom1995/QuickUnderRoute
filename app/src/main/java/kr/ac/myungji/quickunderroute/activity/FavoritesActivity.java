@@ -1,9 +1,11 @@
-package kr.ac.myungji.quickunderroute;
+package kr.ac.myungji.quickunderroute.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+
+import kr.ac.myungji.quickunderroute.R;
 
 public class FavoritesActivity extends Activity {
 
