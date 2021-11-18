@@ -67,6 +67,7 @@
             android:id="@+id/BtnSet"
             android:text="설정"/>
 
+
     </LinearLayout>
 
     <WebView
