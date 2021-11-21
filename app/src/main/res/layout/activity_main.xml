@@ -43,51 +43,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/LayMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            tools:visibility="visible">
-
-            <Button
-                android:id="@+id/btn_test"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="테스트" />
-
-            <Button
-                android:id="@+id/btn_fav"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="즐겨찾기" />
-
-            <Button
-                android:id="@+id/btn_notice"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="공지사항" />
-
-            <Button
-                android:id="@+id/btn_lost"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="유실물 센터" />
-
-            <Button
-                android:id="@+id/btn_settings"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="설정" />
-
-
-        </LinearLayout>
-
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"

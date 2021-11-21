@@ -3,22 +3,35 @@
 
 <group android:checkableBehavior="single">
     <item
-        android:id="@+id/nav_camera"
-        android:title="Camera"
+        android:id="@+id/btn_test"
+        android:title="Test"
         android:icon="@drawable/alarm_off"
         />
 
     <item
-        android:id="@+id/nav_photo"
-        android:title="Photo"
+        android:id="@+id/btn_fav"
+        android:title="즐겨찾기"
         android:icon="@drawable/alarm_off"
         />
 
     <item
-        android:id="@+id/nav_slideShow"
-        android:title="SlideShow"
+        android:id="@+id/btn_notice"
+        android:title="공지사항"
         android:icon="@drawable/alarm_off"
         />
+
+    <item
+        android:id="@+id/btn_lost"
+        android:title="유실물센터"
+        android:icon="@drawable/alarm_off"
+        />
+
+    <item
+        android:id="@+id/btn_settings"
+        android:title="설정"
+        android:icon="@drawable/alarm_off"
+        />
+
 </group>
 
 </menu>

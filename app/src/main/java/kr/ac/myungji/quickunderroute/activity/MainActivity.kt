@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.http.SslError
 import android.os.Bundle
 import android.os.Message
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -22,21 +23,23 @@ import kotlinx.coroutines.*
 import kr.ac.myungji.quickunderroute.activity.FavoritesActivity
 import kr.ac.myungji.quickunderroute.activity.LostActivity
 import kr.ac.myungji.quickunderroute.activity.RouteActivity
+import kr.ac.myungji.quickunderroute.entity.RoomEdge
 import kr.ac.myungji.quickunderroute.entity.RoomStation
 import org.w3c.dom.Text
 import java.lang.Runnable
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    // UI 관련
+    // UI 관련 변수
     private lateinit var webView: WebView
     private var toolbar: Toolbar? = null
     private lateinit var navigationView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
     
-    // 로직 관련
+    // 로직 관련 변수
     private lateinit var job: Job
     private var db: AppDatabase? = null
-    private val stationList: List<RoomStation>? = null
+    private var stationList: List<RoomStation>? = null
+    private var stNo: Array<String> = Array<String>(112) { "a" }
 
     // MainActivity가 생성될 때
     @SuppressLint("SetJavaScriptEnabled")
@@ -44,21 +47,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // drawerlayout 사용을 위한 toolbar
+        // drawerlayout 사용을 위한 toolbar 설정
         toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
 
-
+        // 메뉴버튼 클릭동작
         var btnMenu: ImageView = findViewById(R.id.btn_menu)
         drawerLayout = findViewById(R.id.drawer_layout)
         btnMenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        // 메뉴 네비게이션 설정
         navigationView = findViewById(R.id.main_navi)
         navigationView.setNavigationItemSelectedListener(this)
 
-        // 지하철 노선도
+        // 지하철 노선도 연결
         webView = findViewById(R.id.webView)        // html로 UI를 구현하기 위해서 사용
 
         webView.apply {
@@ -96,7 +100,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
 
-            //WebView 설정모음
+            // WebView 설정모음
             settings.javaScriptEnabled = true   //자바스크립트실행가능
             settings.setSupportMultipleWindows(true)    //새창생성허용
             settings.javaScriptCanOpenWindowsAutomatically = true
@@ -111,6 +115,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         webView.loadUrl("file:///android_asset/UI/subwayMap.html")
 
+        // 스레드 관련 처리
         job = CoroutineScope(Dispatchers.IO).launch{
             DatabaseCopier.copyAttachedDatabase(context = applicationContext)
         }
@@ -121,76 +126,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         db = DatabaseCopier.getAppDataBase(context = applicationContext)
 
-        // 데이터베이스를 사용하는 작업
+        // 데이터베이스를 사용하는 작업은 메인스레드가 아닌 별도 스레드에서
         val r = Runnable {
             // 경로찾기
             RouteComputing(db).dijkstra(101, null, 307)
 
             // 역정보 추출
-            val stationList: List<RoomStation>? = db!!.roomStationDao().getAll()
+            stationList = db!!.roomStationDao().getAll()
+            if(stationList != null) {
+                for (i in stationList!!.indices) {
+                    stNo[i] = stationList!![i].no.toString()
+                }
+            }
+
         }
 
         val thread = Thread(r)
         thread.start()
 
-        var arr1 = Array<String>(112, { "a" })
-
-        if (stationList != null) {
-            for (i in stationList.indices) {
-                arr1[i] = stationList[i].no.toString()
-            }
-        }
-
-        //자동완성 연결
-        var items = arr1
+        // 자동완성 연결
         var autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
         var adapter = ArrayAdapter<String>(this,
             android.R.layout.simple_dropdown_item_1line,
-            items)
+            stNo)
         autoCompleteTextView.setAdapter(adapter)
-
-
-        /*
-        // 메뉴
-        var layMenu: LinearLayout = findViewById(R.id.LayMenu)
-        var btnMenu: Button = findViewById(R.id.btn_menu)
-        var btnNum: Boolean = true;
-
-        btnMenu.setOnClickListener {
-            if(btnNum) {
-                layMenu.visibility = View.VISIBLE
-                btnNum = false;
-            }else{
-                layMenu.visibility = View.INVISIBLE
-                btnNum = true;
-            }
-        }
-
-         */
-
-        // 즐겨찾기 화면 전환
-        var btnFav:Button = findViewById(R.id.btn_fav)
-
-        btnFav.setOnClickListener {
-            val intent = Intent(this, FavoritesActivity::class.java)
-            startActivity(intent)
-        }
-
-        // 유실물 화면 전환
-        var btnLost: Button = findViewById(R.id.btn_lost)
-
-        btnLost.setOnClickListener {
-            val intent = Intent(this, LostActivity::class.java)
-            startActivity(intent)
-        }
-
-        // 루트 테스트 화면 전환
-        var btnTest: Button = findViewById(R.id.btn_test)
-
-        btnTest.setOnClickListener {
-            val intent = Intent(this, RouteActivity::class.java)
-            startActivity(intent)
-        }
 
     }
 
@@ -203,7 +162,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         // 클릭한 툴바 메뉴 아이템 id 마다 다르게 실행하도록 설정
-        when(item!!.itemId){
+        when(item.itemId){
             R.id.main_navi -> {
                 // 네비게이션 드로어 열기
                 drawerLayout.openDrawer(GravityCompat.START)
@@ -212,16 +171,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onOptionsItemSelected(item)
     }
 
+    // 메뉴 네비게이션 목록과 선택 시 기능
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.nav_camera -> {
-                displayMessage("camera selected")
+            R.id.btn_test -> {
+                val intent = Intent(this, RouteActivity::class.java)
+                startActivity(intent)
             }
-            R.id.nav_photo -> {
-                displayMessage("photo selected")
+            R.id.btn_fav -> {
+                val intent = Intent(this, FavoritesActivity::class.java)
+                startActivity(intent)
             }
-            R.id.nav_slideShow -> {
-                displayMessage("slideshow selected")
+            R.id.btn_notice -> {
+                displayMessage("notice selected")
+            }
+            R.id.btn_lost -> {
+                val intent = Intent(this, LostActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.btn_settings -> {
+                displayMessage("settings selected")
             }
         }
         drawerLayout.closeDrawers()

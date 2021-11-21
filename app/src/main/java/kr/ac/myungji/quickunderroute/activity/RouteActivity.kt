@@ -6,12 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kr.ac.myungji.quickunderroute.AlarmReceiver
 import kr.ac.myungji.quickunderroute.R
+
 
 class RouteActivity : AppCompatActivity() {
     private var alarmMgr: AlarmManager? = null
@@ -34,6 +36,20 @@ class RouteActivity : AppCompatActivity() {
                 btnGetoffAlarm.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C92424"))
                 isAlarmSet = true
             }
+        }
+
+        // 도착시간 공유
+        val btnSendText: Button = findViewById(R.id.btn_share)
+        var arriveTime: String = "3"
+        btnSendText.setOnClickListener {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "${arriveTime}분 뒤에 도착 예정입니다.")
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
         }
     }
 
