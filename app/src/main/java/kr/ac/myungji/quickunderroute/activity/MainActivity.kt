@@ -228,25 +228,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             if (url.startsWith("app://")) {
                 val intent = Intent(this@MainActivity, StationActivity::class.java)
-/*
-                map: Map<String, String> = getQueryMap(aURL.getQuery());
-
-                if (map!=null) {
-                    Set<String> keys=map.keySet();
-                    int idx=0;
-                    for (String key: keys) {
-                        System.out.println("Parameter[" + idx + "].Name=" + key);
-                        System.out.println("Parameter[" + idx + "].Value=" + map.get(key));
-                        idx++;
-                    }
-                }
-                else {
-                    System.out.println("Cannot Find Query");
-                }
-
-                intent.putExtra("no", no)
+                val no = url.substring(6,9)
                 Log.d("webview", no)
-*/
+                intent.putExtra("no", no)
                 startActivity(intent)
             }
             else {

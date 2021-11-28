@@ -13,12 +13,8 @@ class StationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_station)
 
-
-
-
-//        val no = getIntent().getStringExtra("no")
-//        Toast.makeText(this, stNo.toString(), Toast.LENGTH_SHORT).show()
-        Toast.makeText(this, "역정보화면입니다.", Toast.LENGTH_SHORT).show()
+        val no = getIntent().getStringExtra("no")
+        Toast.makeText(this, no.toString(), Toast.LENGTH_SHORT).show()
 
 
     }
