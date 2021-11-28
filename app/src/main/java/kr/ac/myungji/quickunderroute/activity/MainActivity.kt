@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             stNo)
         autoCompleteTextView.setAdapter(adapter)
         
-        // 검색버튼 클릭동작
+        // 검색버튼 클릭
         var btnSearch: ImageView = findViewById(R.id.btn_search)
         btnSearch.setOnClickListener {
             var searchNo = autoCompleteTextView.text.toString();
