@@ -166,6 +166,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             android.R.layout.simple_dropdown_item_1line,
             stNo)
         autoCompleteTextView.setAdapter(adapter)
+        
+        // 검색버튼 클릭동작
+        var btnSearch: ImageView = findViewById(R.id.btn_search)
+        btnSearch.setOnClickListener {
+            var searchNo = autoCompleteTextView.text.toString();
+            for (i in stationList!!.indices) {
+                if (searchNo == stNo[i]) {
+                    val intent = Intent(this, StationActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
 
     }
 
