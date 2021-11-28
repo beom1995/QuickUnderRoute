@@ -11,6 +11,9 @@ interface RoomStationDAO {
     @Query("select * from STATION_TB")
     fun getAll(): List<RoomStation>
 
+    @Query("select `TRANSFER_ST` from STATION_TB where `NO`=:no")
+    fun getStationTransSt(no: Int): Int
+
     @Insert
     fun insert(station: RoomStation)
 

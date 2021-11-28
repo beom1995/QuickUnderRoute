@@ -24,6 +24,10 @@ THE SOFTWARE.
 
 */
 
+function getStationInfo(no) {
+    Android.getStationInfo(no);
+}
+
 (function ($) {
 
     var plugin = {
@@ -189,6 +193,7 @@ THE SOFTWARE.
 
                     var link = "";
                     var title = "";
+
                     if (anchor != undefined) {
                         link = $(anchor).attr("href");
                         if (link === undefined) link = "";
@@ -439,8 +444,10 @@ THE SOFTWARE.
                 break;
         }
         var style = (textClass != "" ? "class='" + textClass + "' " : "") + "style='" + (textClass == "" ? "font-size:8pt;font-family:Verdana,Arial,Helvetica,Sans Serif;text-decoration:none;" : "") + "width:100px;" + (pos != "" ? pos : "") + ";position:absolute;top:" + (y + el.position().top - (topOffset > 0 ? topOffset : 0)) + "px;left:" + (x + el.position().left) + "px;z-index:3000;'";
+
         if (data.link != "")
-            $("<a " + style + " title='" + data.title.replace(/\\n/g,"<br />") + "' href='" + data.link + "' target='_new'>" + data.label.replace(/\\n/g,"<br />") + "</span>").appendTo(el);
+            $("<a " + style + " title='" + data.title.replace(/\\n/g,"<br />") + "' href='" + data.link + "'>" + data.label.replace(/\\n/g,"<br />") + "</span>").appendTo(el);
+            //$("<a " + style + " title='" + data.title.replace(/\\n/g,"<br />") + "' href='" + data.link + "' target='_new'>" + data.label.replace(/\\n/g,"<br />") + "</span>").appendTo(el);
         else
             $("<span " + style + ">" + data.label.replace(/\\n/g,"<br />") + "</span>").appendTo(el);
 

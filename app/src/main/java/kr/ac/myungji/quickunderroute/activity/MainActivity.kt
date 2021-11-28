@@ -1,7 +1,9 @@
 package kr.ac.myungji.quickunderroute
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.http.SslError
@@ -9,7 +11,6 @@ import android.os.Bundle
 import android.os.Message
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import android.widget.*
@@ -18,15 +19,32 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import kotlinx.coroutines.*
 import kr.ac.myungji.quickunderroute.activity.FavoritesActivity
 import kr.ac.myungji.quickunderroute.activity.LostActivity
 import kr.ac.myungji.quickunderroute.activity.RouteActivity
-import kr.ac.myungji.quickunderroute.entity.RoomEdge
+import kr.ac.myungji.quickunderroute.activity.StationActivity
 import kr.ac.myungji.quickunderroute.entity.RoomStation
-import org.w3c.dom.Text
 import java.lang.Runnable
+import java.net.URI
+import java.util.*
+import java.util.Arrays.*
+
+// context 공유를 위해
+class MyApp: Application() {
+    lateinit var context: Context
+
+    init{
+        instance = this
+    }
+
+    companion object {
+        private var instance: MyApp? = null
+        fun getApplicationContext(): Context {
+            return instance!!.applicationContext
+        }
+    }
+}
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     // UI 관련 변수
@@ -64,6 +82,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // 지하철 노선도 연결
         webView = findViewById(R.id.webView)        // html로 UI를 구현하기 위해서 사용
+        webView.addJavascriptInterface(WebViewConnector(this), "Android")
 
         webView.apply {
             webViewClient = WebViewClientClass() // 클릭시 새창 안뜨게
@@ -108,9 +127,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             settings.useWideViewPort = true
             settings.setSupportZoom(true)
             settings.builtInZoomControls = true
+            settings.displayZoomControls = false
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
             settings.domStorageEnabled = true
-            settings.displayZoomControls = true
+
         }
 
         webView.loadUrl("file:///android_asset/UI/subwayMap.html")
@@ -128,19 +148,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // 데이터베이스를 사용하는 작업은 메인스레드가 아닌 별도 스레드에서
         val r = Runnable {
-            // 경로찾기
-            RouteComputing(db).dijkstra(101, null, 307)
-
             // 역정보 추출
             stationList = db!!.roomStationDao().getAll()
+
             if(stationList != null) {
                 for (i in stationList!!.indices) {
                     stNo[i] = stationList!![i].no.toString()
                 }
             }
-
         }
-
         val thread = Thread(r)
         thread.start()
 
@@ -210,7 +226,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     inner class WebViewClientClass : WebViewClient() {
         //페이지 이동
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            view.loadUrl(url)
+            if (url.startsWith("app://")) {
+                val intent = Intent(this@MainActivity, StationActivity::class.java)
+/*
+                map: Map<String, String> = getQueryMap(aURL.getQuery());
+
+                if (map!=null) {
+                    Set<String> keys=map.keySet();
+                    int idx=0;
+                    for (String key: keys) {
+                        System.out.println("Parameter[" + idx + "].Name=" + key);
+                        System.out.println("Parameter[" + idx + "].Value=" + map.get(key));
+                        idx++;
+                    }
+                }
+                else {
+                    System.out.println("Cannot Find Query");
+                }
+
+                intent.putExtra("no", no)
+                Log.d("webview", no)
+*/
+                startActivity(intent)
+            }
+            else {
+                view.loadUrl(url)
+            }
             return true
         }
 
@@ -240,5 +281,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onDestroy() {
         job.cancel()
         super.onDestroy()
+    }
+}
+
+class WebViewConnector(val context: Context) : AppCompatActivity(){
+
+    @JavascriptInterface
+    fun getStationInfo(no: String) {
+        val intent = Intent(context, StationActivity::class.java)
+        intent.putExtra("no", no)
+        Log.d("webview", no)
+        startActivity(intent)
     }
 }

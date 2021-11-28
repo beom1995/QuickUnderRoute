@@ -8,21 +8,46 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kr.ac.myungji.quickunderroute.AlarmReceiver
-import kr.ac.myungji.quickunderroute.R
-
+import kr.ac.myungji.quickunderroute.*
 
 class RouteActivity : AppCompatActivity() {
     private var alarmMgr: AlarmManager? = null
     private lateinit var alarmIntent: PendingIntent
 
+    private var routeCompute: RouteComputing = RouteComputing()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)
 
+        // 정보를 표시할 화면 요소
+        val infoArriveTime: TextView = findViewById(R.id.info_time)
+        val infoFare: TextView = findViewById(R.id.info_fare)
+        val infoTrans: TextView = findViewById(R.id.info_trans)
+
+        // 계산된 경로 정보
+        var infoArrAll: Array<Array<Int>>? = null
+
+        val r = Runnable {
+            infoArrAll = routeCompute.dijkstra(101, null, 307)
+
+            if(infoArrAll != null){
+                for(i in 0 until 3) {
+                    for(j in 0 until 4) {
+                        Log.d("infoArrAll[${i}][${j}]", "${infoArrAll!![i][j]}")
+                    }
+                }
+            }
+        }
+        val thread = Thread(r)
+        thread.start()
+
+        // 하차알림
         val btnGetoffAlarm: FloatingActionButton = findViewById(R.id.btn_getoff)
         var isAlarmSet = false
 
@@ -38,13 +63,14 @@ class RouteActivity : AppCompatActivity() {
             }
         }
 
+        val dstn = 101
         // 도착시간 공유
         val btnSendText: Button = findViewById(R.id.btn_share)
         var arriveTime: String = "3"
         btnSendText.setOnClickListener {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "${arriveTime}분 뒤에 도착 예정입니다.")
+                putExtra(Intent.EXTRA_TEXT, "${arriveTime}분 뒤에 ${dstn}역에 도착 예정입니다.")
                 type = "text/plain"
             }
 
@@ -65,38 +91,6 @@ class RouteActivity : AppCompatActivity() {
             SystemClock.elapsedRealtime() + 60 * 1000,
             alarmIntent
         )
-
- /*
-
-        // 저장한 데이터를 확인한다
-            val model = it.tag as? AlarmDisplayModel ?: return@setOnClickListener// 형변환 실패하는 경우에 null
-            val newModel = saveAlarmModel(model.hour, model.minute, model.onOff.not()) // on off 스위칭
-            renderView(newModel)
-
-
-                val calender = Calendar.getInstance().apply {
-                    set(Calendar.HOUR_OF_DAY, newModel.hour)
-                    set(Calendar.MINUTE, newModel.minute) // 지나간 시간의 경우 다음날 알람으로 울리도록
-                    if (before(Calendar.getInstance())) {
-                        add(Calendar.DATE, 1) // 하루 더하기
-                    }
-                }
-                //알람 매니저 가져오기.
-                val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-                val intent = Intent(this, AlarmReceiver::class.java)
-                val pendingIntent = PendingIntent.getBroadcast(this,
-                    NotificationHelper.M_ALARM_REQUEST_CODE,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT) // 있으면 새로 만든거로 업데이트
-
-                alarmManager.setInexactRepeating( // 정시에 반복
-                    AlarmManager.RTC_WAKEUP, // RTC_WAKEUP : 실제 시간 기준으로 wakeup , ELAPSED_REALTIME_WAKEUP : 부팅 시간 기준으로 wakeup
-                    calender.timeInMillis, // 언제 알람이 발동할지.
-                    AlarmManager.INTERVAL_DAY, // 하루에 한번씩.
-                    pendingIntent
-                )
-*/
     }
 
     // 하차알림을 취소한다.
