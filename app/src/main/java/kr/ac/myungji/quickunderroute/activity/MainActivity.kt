@@ -167,13 +167,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             stNo)
         autoCompleteTextView.setAdapter(adapter)
         
-        // 검색버튼 클릭
+        // 검색버튼 클릭동작
         var btnSearch: ImageView = findViewById(R.id.btn_search)
         btnSearch.setOnClickListener {
-            var searchNo = autoCompleteTextView.text.toString();
+            val searchNo = autoCompleteTextView.text.toString();
             for (i in stationList!!.indices) {
                 if (searchNo == stNo[i]) {
                     val intent = Intent(this, StationActivity::class.java)
+                    intent.putExtra("no", searchNo)
                     startActivity(intent)
                 }
             }
