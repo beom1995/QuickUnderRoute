@@ -162,9 +162,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // 자동완성 연결
         var autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
-        var adapter = ArrayAdapter<String>(this,
-            android.R.layout.simple_dropdown_item_1line,
-            stNo)
+        var adapter = ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, stNo)
         autoCompleteTextView.setAdapter(adapter)
         
         // 검색버튼 클릭동작

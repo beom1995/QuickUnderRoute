@@ -19,6 +19,7 @@ class StationActivity : AppCompatActivity() {
     lateinit var TextNowST:TextView
     lateinit var TextAfterST:TextView
     lateinit var btnStartST:Button
+    lateinit var btnStopOverST:Button
     lateinit var btnArrivalST:Button
     lateinit var btnFavorites:Button
 
@@ -32,10 +33,12 @@ class StationActivity : AppCompatActivity() {
         TextNowST = findViewById(R.id.textNowST)
         TextAfterST = findViewById(R.id.textAfterST)
         btnStartST = findViewById(R.id.btnStartST)
+        btnStopOverST = findViewById(R.id.btnStopOverST)
         btnArrivalST = findViewById(R.id.btnArrivalST)
         btnFavorites = findViewById(R.id.btnFavorites)
 
         val no = getIntent().getStringExtra("no")
+
         var noText = no.toString()
         var STline = noText.substring(3, 4)
         var STline2 = noText.substring(10, 11).toInt()
@@ -55,6 +58,9 @@ class StationActivity : AppCompatActivity() {
             btnLine2.visibility = View.VISIBLE
             btnLine2.setText(STline2.toString())
         }
+
+        TextPreviousST.setText(CheckEnd(previousST))
+        TextAfterST.setText(CheckEnd(afterST))
 
         btnLine1.setOnClickListener(View.OnClickListener {
             previousST = noText.substring(4, 7)
@@ -77,15 +83,16 @@ class StationActivity : AppCompatActivity() {
         //현재 역
         TextNowST.setText(nowST)
 
+        //Toast.makeText(this, no.toString(), Toast.LENGTH_SHORT).show()
 
-        Toast.makeText(this, no.toString(), Toast.LENGTH_SHORT).show()
+
 
     }
 
     fun CheckEnd(str: String):String{
         var EndST = "a"
         if(str == "000"){
-            EndST = "종착"
+            EndST = ""
         }else{
             EndST = str
         }
