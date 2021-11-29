@@ -25,6 +25,9 @@ class RouteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)
 
+        var src: Int = 101
+        var dstn: Int = 307
+
         // 정보를 표시할 화면 요소
         val infoArriveTime: TextView = findViewById(R.id.info_time)
         val infoFare: TextView = findViewById(R.id.info_fare)
@@ -34,7 +37,7 @@ class RouteActivity : AppCompatActivity() {
         var infoArrAll: Array<Array<Int>>? = null
 
         val r = Runnable {
-            infoArrAll = routeCompute.dijkstra(101, null, 307)
+            infoArrAll = routeCompute.dijkstra(src, null, dstn)
 
             if(infoArrAll != null){
                 for(i in 0 until 3) {
@@ -63,14 +66,12 @@ class RouteActivity : AppCompatActivity() {
             }
         }
 
-        val dstn = 101
         // 도착시간 공유
         val btnSendText: Button = findViewById(R.id.btn_share)
-        var arriveTime: String = "3"
         btnSendText.setOnClickListener {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "${arriveTime}분 뒤에 ${dstn}역에 도착 예정입니다.")
+                putExtra(Intent.EXTRA_TEXT, "${infoArrAll?.get(0)?.get(0)}분 뒤에 ${dstn}역에 도착 예정입니다.")
                 type = "text/plain"
             }
 
@@ -79,8 +80,13 @@ class RouteActivity : AppCompatActivity() {
         }
     }
 
+    // 하차알림을 취소한다.
+    private fun secToMin() {
+        // wait
+    }
+
     // 하차 알림을 설정한다.
-    fun setAlarm() {
+    private fun setAlarm() {
         alarmMgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmIntent = Intent(this, AlarmReceiver::class.java).let { intent ->
             PendingIntent.getBroadcast(this, 0, intent, 0)
@@ -94,7 +100,7 @@ class RouteActivity : AppCompatActivity() {
     }
 
     // 하차알림을 취소한다.
-    fun cancelAlarm() {
+    private fun cancelAlarm() {
         alarmMgr?.cancel(alarmIntent)
     }
 }

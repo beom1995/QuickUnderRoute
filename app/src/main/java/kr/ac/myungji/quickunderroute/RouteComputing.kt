@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import kr.ac.myungji.quickunderroute.entity.RoomEdge
 import kr.ac.myungji.quickunderroute.MyApp.Companion.getApplicationContext
+import kr.ac.myungji.quickunderroute.entity.RoomStation
 import java.util.*
 
 private const val INF: Int = 1000000000     // 값이 무한대(infinity)라 가정
@@ -11,14 +12,17 @@ private const val INF: Int = 1000000000     // 값이 무한대(infinity)라 가
 class RouteComputing() {
     private var db: AppDatabase? = null
     private var edgeList: List<RoomEdge>? = null
+    private var stationList: List<RoomStation>? = null
 
-    private lateinit var cost: IntArray
-    private lateinit var vis: BooleanArray
+    private lateinit var graphTime: ArrayList<ArrayList<Node>>
+    private lateinit var graphDist: ArrayList<ArrayList<Node>>
+    private lateinit var graphFare: ArrayList<ArrayList<Node>>
 
-    // minheap을 이용하여 가장 적은 비용을 가진 경로를 계산
-    private val queueTime = PriorityQueue<Node>()
-    private val queueDist = PriorityQueue<Node>()
-    private val queueFare = PriorityQueue<Node>()
+    private var cost: IntArray = IntArray(911) { INF }
+    private val stNum: Int = 111    // 역 수
+    private val lastStNo: Int = 910   // 마지막 역 번호
+
+    private var q = PriorityQueue<Node>()   // minheap을 이용하여 가장 적은 비용을 가진 경로를 계산
 
     init {
         val appContext: Context = getApplicationContext()
@@ -26,6 +30,30 @@ class RouteComputing() {
 
         val r = Runnable {
             edgeList = db!!.roomEdgeDao().getAll()
+            stationList = db!!.roomStationDao().getAll()
+
+
+            // 시간, 거리, 요금을 바탕으로 그래프 구성
+            graphTime = ArrayList<ArrayList<Node>>()
+            graphDist = ArrayList<ArrayList<Node>>()
+            graphFare = ArrayList<ArrayList<Node>>()
+
+            for (i in 0 until lastStNo) {
+                graphTime.add(ArrayList<Node>())
+                graphDist.add(ArrayList<Node>())
+                graphFare.add(ArrayList<Node>())
+            }
+
+            for (i in edgeList!!.indices) {
+                graphTime.get(edgeList!![i].src).add(Node(edgeList!![i].dstn, edgeList!![i].timeSec))
+                graphTime.get(edgeList!![i].dstn).add(Node(edgeList!![i].src, edgeList!![i].timeSec))
+
+                graphDist.get(edgeList!![i].src).add(Node(edgeList!![i].dstn, edgeList!![i].distanceM))
+                graphDist.get(edgeList!![i].dstn).add(Node(edgeList!![i].src, edgeList!![i].distanceM))
+
+                graphFare.get(edgeList!![i].src).add(Node(edgeList!![i].dstn, edgeList!![i].fareWon))
+                graphFare.get(edgeList!![i].dstn).add(Node(edgeList!![i].src, edgeList!![i].fareWon))
+            }
         }
         val thread = Thread(r)
         thread.start()
@@ -36,143 +64,74 @@ class RouteComputing() {
         var infoArrTime: Array<Int> = Array<Int>(4) {0}
         var infoArrDist: Array<Int> = Array<Int>(4) {0}
         var infoArrFare: Array<Int> = Array<Int>(4) {0}
-
         var infoArrAll: Array<Array<Int>> = arrayOf(infoArrTime, infoArrDist, infoArrFare)
 
-        var curSrc = src
-        vis = BooleanArray(111)
+        var sa: ArrayList<Int> = ArrayList<Int>()
 
-        queueTime.add(Node(src, 0))
-        queueDist.add(Node(src, 0))
-        queueFare.add(Node(src, 0))
+        var cnt: Int = 0
 
-        // 최단 시간 계산
-        cost = IntArray(910) { INF }
-        cost[curSrc] = 0 // 시작 거리는 0
+        // 시간
+        cost[src] = 0
+        var curNode: Node = Node(src, 0)
+        q.offer(curNode)
+        while (!q.isEmpty()) {
+            var preNode: Node = curNode
+            curNode = q.poll()
+            sa.add(curNode.index)   // 경로 추적
 
-        while (queueTime.isNotEmpty()) {
-            var prevSrc = curSrc
-            curSrc = queueTime.peek().index  // 현재 노드 인덱스
-            if (edgeList != null) {
-                for (i in edgeList!!.indices) {
-                    //최단시간
-                    if(edgeList!![i].src == prevSrc && edgeList!![i].dstn == curSrc) {
+            for (i in edgeList!!.indices) {
+                if((edgeList!![i].src == preNode.index && edgeList!![i].dstn == curNode.index)
+                    || (edgeList!![i].src == curNode.index && edgeList!![i].dstn == preNode.index)) {
                         infoArrTime[1] += edgeList!![i].distanceM
                         infoArrTime[2] += edgeList!![i].fareWon
-                        infoArrTime[3] += db!!.roomStationDao().getStationTransSt(curSrc)
-                    }
+                        infoArrTime[3] += db!!.roomStationDao().getStationTransSt(curNode.index)
+                        break
+
                 }
             }
-            val curCost = queueTime.peek().cost  // 현재 노드까지의 비용
-            queueTime.poll()
 
-            if (cost[curSrc] < curCost) continue // 탐색 시간을 줄이기 위해
-            // 현재 거리가 현재 노드까지의 거리보다 작으면 탐색 중단
+			if (curNode.index == dstn) {
+			    Log.d("escape", "o")
+				break
+			}
 
-            if (edgeList != null) {
-                for (i in edgeList!!.indices) { // 연결된 노드들 탐색
-                    //최단시간
-                    if(edgeList!![i].src == curSrc) {
-                        val nextIndex = edgeList!![i].dstn
-                        val nextCost = curCost + edgeList!![i].timeSec
+            if (cost[curNode.index] < curNode.cost) {
+                continue
+            }
 
-                        if (nextCost < cost[nextIndex]) {
-                            cost[nextIndex] = nextCost
-                            queueTime.add(Node(nextIndex, nextCost))
-                        }
-                    }
+            for (i in 0 until graphTime.get(curNode.index).size) {
+                var nxtNode: Node = graphTime.get(curNode.index).get(i)
+                Log.d("nextnode${nxtNode.index}", curNode.cost.toString()+"//" + nxtNode.cost.toString())
+                Log.d("cost[nxtNode.index]", cost[nxtNode.index].toString())
+                if (cost[nxtNode.index] > curNode.cost + nxtNode.cost) {
+
+                    cost[nxtNode.index] = curNode.cost + nxtNode.cost
+                    q.offer(Node(nxtNode.index, cost[nxtNode.index]))
                 }
             }
         }
+
         infoArrTime[0] = cost[dstn]
 
+        Log.d("cnt", cnt.toString())
 
-        // 최단 거리 계산
-        curSrc = src
-        cost = IntArray(910) { INF }
-        cost[curSrc] = 0 // 시작 거리는 0
-        while (queueDist.isNotEmpty()) {
-            var prevSrc = curSrc
-            curSrc = queueDist.peek().index  // 현재 노드 인덱스
-            if (edgeList != null) {
-                for (i in edgeList!!.indices) {
-                    //최단시간
-                    if(edgeList!![i].src == prevSrc && edgeList!![i].dstn == curSrc) {
-                        infoArrDist[0] += edgeList!![i].timeSec
-                        infoArrDist[2] += edgeList!![i].fareWon
-                        infoArrDist[3] += db!!.roomStationDao().getStationTransSt(curSrc)
-                    }
-                }
-            }
-            val curCost = queueDist.peek().cost  // 현재 노드까지의 비용
-            queueDist.poll()
-
-            if (cost[curSrc] < curCost) continue // 탐색 시간을 줄이기 위해
-            // 현재 거리가 현재 노드까지의 거리보다 작으면 탐색 중단
-
-            if (edgeList != null) {
-                for (i in edgeList!!.indices) { // 연결된 노드들 탐색
-                    //최단시간
-                    if(edgeList!![i].src == curSrc) {
-                        val nextIndex = edgeList!![i].dstn
-                        val nextCost = curCost + edgeList!![i].distanceM
-
-                        if (nextCost < cost[nextIndex]) {
-                            cost[nextIndex] = nextCost
-                            queueDist.add(Node(nextIndex, nextCost))
-                        }
-                    }
-                }
-            }
+        for (c in 0 until lastStNo) {
+            Log.d("cost${c}", cost[c].toString())
         }
-        infoArrDist[1] = cost[dstn]
-
-        
-        // 최저 요금 계산
-        curSrc = src
-        cost = IntArray(910) { INF }
-        cost[curSrc] = 0 // 시작 거리는 0
-        while (queueFare.isNotEmpty()) {
-            var prevSrc = curSrc
-            curSrc = queueFare.peek().index  // 현재 노드 인덱스
-            if (edgeList != null) {
-                for (i in edgeList!!.indices) {
-                    //최단시간
-                    if(edgeList!![i].src == prevSrc && edgeList!![i].dstn == curSrc) {
-                        infoArrFare[0] += edgeList!![i].timeSec
-                        infoArrFare[1] += edgeList!![i].distanceM
-                        infoArrFare[3] += db!!.roomStationDao().getStationTransSt(curSrc)
-                    }
-                }
-            }
-            val curCost = queueFare.peek().cost  // 현재 노드까지의 비용
-            queueFare.poll()    // 지나간 길 제외
-
-            if (cost[curSrc] < curCost) continue // 탐색 시간을 줄이기 위해
-            // 현재 거리가 현재 노드까지의 거리보다 작으면 탐색 중단
-
-            if (edgeList != null) {
-                for (i in edgeList!!.indices) { // 연결된 노드들 탐색
-                    //최단시간
-                    if (edgeList!![i].src == curSrc) {
-                        val nextIndex = edgeList!![i].dstn
-                        val nextCost = curCost + edgeList!![i].fareWon
-
-                        if (nextCost < cost[nextIndex]) {
-                            cost[nextIndex] = nextCost
-                            queueFare.add(Node(nextIndex, nextCost))
-                        }
-                    }
-                }
-            }
+        for (a in sa.indices) {
+            Log.d("sa${a}", sa[a].toString())
         }
-        infoArrFare[2] = cost[dstn]
 
-        // 환승역 개수 처리
-        var no: Int? = null
+        // 환승역 개수 보정
         val s = Runnable {
-            no = db!!.roomStationDao().getStationTransSt(dstn)
-            if(no == 1){
+            var start: Int = db!!.roomStationDao().getStationTransSt(src)
+            var end: Int = db!!.roomStationDao().getStationTransSt(dstn)
+            if(start == 1){
+                infoArrTime[3] -= 1
+                infoArrDist[3] -= 1
+                infoArrFare[3] -= 1
+            }
+            if(end == 1){
                 infoArrTime[3] -= 1
                 infoArrDist[3] -= 1
                 infoArrFare[3] -= 1
