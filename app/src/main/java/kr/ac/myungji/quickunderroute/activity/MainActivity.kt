@@ -169,9 +169,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var btnSearch: ImageView = findViewById(R.id.btn_search)
         btnSearch.setOnClickListener {
             val searchNo = autoCompleteTextView.text.toString();
+            val intent = Intent(this, StationActivity::class.java)
             for (i in stationList!!.indices) {
                 if (searchNo == stNo[i]) {
-                    val intent = Intent(this, StationActivity::class.java)
                     intent.putExtra("no", searchNo)
                     startActivity(intent)
                 }
@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             if (url.startsWith("app://")) {
                 val intent = Intent(this@MainActivity, StationActivity::class.java)
-                val no = url.substring(6,23)//바꿈
+                val no = url.substring(6,9)//바꿈
                 Log.d("webview", no)
                 intent.putExtra("no", no)
                 startActivity(intent)
