@@ -228,7 +228,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             if (url.startsWith("app://")) {
                 val intent = Intent(this@MainActivity, StationActivity::class.java)
-                val no = url.substring(6,9)
+                val no = url.substring(6,23)//바꿈
                 Log.d("webview", no)
                 intent.putExtra("no", no)
                 startActivity(intent)
