@@ -1,15 +1,21 @@
 package kr.ac.myungji.quickunderroute.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import kr.ac.myungji.quickunderroute.List.ListViewAdapter;
+import kr.ac.myungji.quickunderroute.MainActivity;
 import kr.ac.myungji.quickunderroute.R;
 
 public class FavoritesActivity extends Activity {
@@ -38,7 +44,7 @@ public class FavoritesActivity extends Activity {
         btnInit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editor.putInt("num",0);
+                editor.putInt("num", 0);
                 editor.commit();
             }
         });
@@ -50,6 +56,15 @@ public class FavoritesActivity extends Activity {
 
         adapter.notifyDataSetChanged();
 
+        //즐겨찾기 항목을 누르면 해당 역 정보로 이동
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(),StationActivity.class);
+                intent.putExtra("no",pref.getString("numST"+i, ""));
+                startActivity(intent);
+            }
+        });
 
     }
 }
