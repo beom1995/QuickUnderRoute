@@ -1,14 +1,13 @@
 package kr.ac.myungji.quickunderroute.activity
 
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import kr.ac.myungji.quickunderroute.MainActivity
 import kr.ac.myungji.quickunderroute.R
 
 
@@ -22,6 +21,9 @@ class StationActivity : AppCompatActivity() {
     lateinit var btnStopOverST:Button
     lateinit var btnArrivalST:Button
     lateinit var btnFavorites:Button
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,22 +44,143 @@ class StationActivity : AppCompatActivity() {
         //Toast.makeText(this, no.toString(), Toast.LENGTH_SHORT).show()
 
         //역 배열
-        var array = arrayOf(arrayOf("101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123"),
-            arrayOf("101","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217"),
-            arrayOf("207","301","302","303","304","123","305","306","307","308","107"),
-            arrayOf("104","401","307","402","403","404","405","406","407","115","408","409","410","411","412","413","414","415","416","417","216"),
-            arrayOf("209","501","502","503","504","122","505","506","403","507","109"),
-            arrayOf("601","602","121","603","604","605","606","116","607","608","609","412","610","611","612","613","614","615","616","417","617","618","619","620","621","622"),
-            arrayOf("202","303","503","601","701","702","703","704","705","706","416","707","614"),
-            arrayOf("113","801","802","803","409","608","804","805","806","705","618","214"),
-            arrayOf("112","901","406","605","902","119","903","702","904","621","211"))
+        var array = arrayOf(
+            arrayOf(
+                "101",
+                "102",
+                "103",
+                "104",
+                "105",
+                "106",
+                "107",
+                "108",
+                "109",
+                "110",
+                "111",
+                "112",
+                "113",
+                "114",
+                "115",
+                "116",
+                "117",
+                "118",
+                "119",
+                "120",
+                "121",
+                "122",
+                "123"
+            ),
+            arrayOf(
+                "101",
+                "201",
+                "202",
+                "203",
+                "204",
+                "205",
+                "206",
+                "207",
+                "208",
+                "209",
+                "210",
+                "211",
+                "212",
+                "213",
+                "214",
+                "215",
+                "216",
+                "217"
+            ),
+            arrayOf("207", "301", "302", "303", "304", "123", "305", "306", "307", "308", "107"),
+            arrayOf(
+                "104",
+                "401",
+                "307",
+                "402",
+                "403",
+                "404",
+                "405",
+                "406",
+                "407",
+                "115",
+                "408",
+                "409",
+                "410",
+                "411",
+                "412",
+                "413",
+                "414",
+                "415",
+                "416",
+                "417",
+                "216"
+            ),
+            arrayOf("209", "501", "502", "503", "504", "122", "505", "506", "403", "507", "109"),
+            arrayOf(
+                "601",
+                "602",
+                "121",
+                "603",
+                "604",
+                "605",
+                "606",
+                "116",
+                "607",
+                "608",
+                "609",
+                "412",
+                "610",
+                "611",
+                "612",
+                "613",
+                "614",
+                "615",
+                "616",
+                "417",
+                "617",
+                "618",
+                "619",
+                "620",
+                "621",
+                "622"
+            ),
+            arrayOf(
+                "202",
+                "303",
+                "503",
+                "601",
+                "701",
+                "702",
+                "703",
+                "704",
+                "705",
+                "706",
+                "416",
+                "707",
+                "614"
+            ),
+            arrayOf(
+                "113",
+                "801",
+                "802",
+                "803",
+                "409",
+                "608",
+                "804",
+                "805",
+                "806",
+                "705",
+                "618",
+                "214"
+            ),
+            arrayOf("112", "901", "406", "605", "902", "119", "903", "702", "904", "621", "211")
+        )
 
         var previousST = no.toString() //이전역
         var afterST = no.toString() //이후역
 
         //배열 위치
-        var STnum = arrayOf(0,0);
-        var STnum2 = arrayOf(0,0);
+        var STnum = arrayOf(0, 0);
+        var STnum2 = arrayOf(0, 0);
         var numSTLine = 0
 
 
@@ -97,8 +220,8 @@ class StationActivity : AppCompatActivity() {
                 afterST = "000"
             }
         }else{
-            previousST = array[STnum[0]][STnum2[0]-1]
-            afterST = array[STnum[0]][STnum2[0]+1]
+            previousST = array[STnum[0]][STnum2[0] - 1]
+            afterST = array[STnum[0]][STnum2[0] + 1]
         }
 
 
@@ -120,25 +243,25 @@ class StationActivity : AppCompatActivity() {
         TextAfterST.setText(CheckEnd(afterST))
 //
           btnLine1.setOnClickListener(View.OnClickListener {
-              if(STnum2[0]-1 < 0){
-                  if(STnum[0] ==0 || STnum[0] == 5) {
+              if (STnum2[0] - 1 < 0) {
+                  if (STnum[0] == 0 || STnum[0] == 5) {
                       previousST = array[STnum[0]][array[STnum[0]].size - 1]
                       afterST = array[STnum[0]][STnum2[0] + 1]
-                  }else{
+                  } else {
                       previousST = "000"
                       afterST = array[STnum[0]][STnum2[0] + 1]
                   }
-              }else if(STnum2[0]+2 > array[STnum[0]].size){
-                  if(STnum[0] ==0 || STnum[0] == 5) {
+              } else if (STnum2[0] + 2 > array[STnum[0]].size) {
+                  if (STnum[0] == 0 || STnum[0] == 5) {
                       previousST = array[STnum[0]][STnum2[0] - 1]
                       afterST = array[STnum[0]][0]
-                  }else{
+                  } else {
                       previousST = array[STnum[0]][STnum2[0] - 1]
                       afterST = "000"
                   }
-              }else{
-                  previousST = array[STnum[0]][STnum2[0]-1]
-                  afterST = array[STnum[0]][STnum2[0]+1]
+              } else {
+                  previousST = array[STnum[0]][STnum2[0] - 1]
+                  afterST = array[STnum[0]][STnum2[0] + 1]
               }
 
               TextPreviousST.setText(previousST)
@@ -148,25 +271,25 @@ class StationActivity : AppCompatActivity() {
           })
 
         btnLine2.setOnClickListener(View.OnClickListener {
-            if(STnum2[1]-1 < 0){
-                if(STnum[1] ==0 || STnum[1] == 5) {
+            if (STnum2[1] - 1 < 0) {
+                if (STnum[1] == 0 || STnum[1] == 5) {
                     previousST = array[STnum[1]][array[STnum[1]].size - 1]
                     afterST = array[STnum[1]][STnum2[1] + 1]
-                }else{
+                } else {
                     previousST = "000"
                     afterST = array[STnum[1]][STnum2[1] + 1]
                 }
-            }else if(STnum2[1]+2 > array[STnum[1]].size){
-                if(STnum[1] ==0 || STnum[1] == 5) {
+            } else if (STnum2[1] + 2 > array[STnum[1]].size) {
+                if (STnum[1] == 0 || STnum[1] == 5) {
                     previousST = array[STnum[1]][STnum2[1] - 1]
                     afterST = array[STnum[1]][1]
-                }else{
+                } else {
                     previousST = array[STnum[1]][STnum2[1] - 1]
                     afterST = "000"
                 }
-            }else{
-                previousST = array[STnum[1]][STnum2[1]-1]
-                afterST = array[STnum[1]][STnum2[1]+1]
+            } else {
+                previousST = array[STnum[1]][STnum2[1] - 1]
+                afterST = array[STnum[1]][STnum2[1] + 1]
             }
 
             TextPreviousST.setText(CheckEnd(previousST))
@@ -175,8 +298,23 @@ class StationActivity : AppCompatActivity() {
             btnLine1.setBackgroundColor(Color.parseColor("white"))
         })
 
-//        //현재 역
+          //현재 역
           TextNowST.setText(nowST)
+
+
+        btnFavorites.setOnClickListener(View.OnClickListener {
+            val pref = getSharedPreferences("pref", MODE_PRIVATE)
+            val editor = pref.edit()
+
+            var num = pref.getInt("num",0)
+            editor.putString("numST"+num, noText)
+
+
+            Toast.makeText(this, "즐겨찾기 등록되었습니다.", Toast.LENGTH_SHORT).show()
+            num++;
+            editor.putInt("num",num++)
+            editor.commit()
+        })
 
     }
 
