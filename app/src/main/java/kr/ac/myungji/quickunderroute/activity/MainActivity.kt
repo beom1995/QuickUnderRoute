@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val editor = pref.edit()
             editor.putBoolean("isFirst", true)
             editor.putInt("num", 0)
+            editor.putInt("timeDelete",0)
             editor.commit()
         }
 

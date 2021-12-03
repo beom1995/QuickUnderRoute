@@ -308,8 +308,6 @@ class StationActivity : AppCompatActivity() {
 
             var num = pref.getInt("num",0)
             editor.putString("numST"+num, noText)
-
-
             Toast.makeText(this, "즐겨찾기 등록되었습니다.", Toast.LENGTH_SHORT).show()
             num++;
             editor.putInt("num",num++)
