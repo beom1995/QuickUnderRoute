@@ -26,9 +26,9 @@ import kr.ac.myungji.quickunderroute.activity.RouteActivity
 import kr.ac.myungji.quickunderroute.activity.StationActivity
 import kr.ac.myungji.quickunderroute.entity.RoomStation
 import java.lang.Runnable
-import java.net.URI
 import java.util.*
 import java.util.Arrays.*
+
 
 // context 공유를 위해
 class MyApp: Application() {
@@ -64,6 +64,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //최초 실행 확인
+        val pref = getSharedPreferences("pref", MODE_PRIVATE)
+        val first = pref.getBoolean("isFirst", false)
+        if (first == false) {
+            val editor = pref.edit()
+            editor.putBoolean("isFirst", true)
+            editor.putInt("num", 0)
+            editor.putInt("timeDelete",0)
+            editor.commit()
+        }
 
         // drawerlayout 사용을 위한 toolbar 설정
         toolbar = findViewById(R.id.main_toolbar)
@@ -239,7 +250,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             if (url.startsWith("app://")) {
                 val intent = Intent(this@MainActivity, StationActivity::class.java)
-                val no = url.substring(6,9)//바꿈
+                val no = url.substring(6, 9)//바꿈
                 Log.d("webview", no)
                 intent.putExtra("no", no)
                 startActivity(intent)
