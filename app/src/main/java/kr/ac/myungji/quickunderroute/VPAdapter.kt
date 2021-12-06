@@ -5,14 +5,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import java.util.ArrayList
 
-class VPAdapter: FragmentPagerAdapter {
-    private var items: ArrayList<Fragment> = ArrayList<Fragment>()
-
-    constructor(fm: FragmentManager) : super(fm) {
-        items.add(tab_time())
-        items.add(tab_dist())
-        items.add(tab_fare())
-    }
+class VPAdapter(manager: FragmentManager): FragmentPagerAdapter(manager) {
+    private val items = ArrayList<Fragment>()
+    private val titleList = ArrayList<String>()
 
     @Override
     override fun getItem(position: Int): Fragment {
@@ -22,5 +17,14 @@ class VPAdapter: FragmentPagerAdapter {
     @Override
     override fun getCount(): Int {
         return items.size
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return titleList[position]
+    }
+
+    fun addFragment(fragment: Fragment, title: String) {
+        items.add(fragment)
+        titleList.add(title)
     }
 }
