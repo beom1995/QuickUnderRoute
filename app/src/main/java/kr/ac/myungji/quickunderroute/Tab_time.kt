@@ -1,61 +1,37 @@
 package kr.ac.myungji.quickunderroute
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [tab_time.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Tab_time : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    var infoTime1: TextView? = null
+    var infoFare1: TextView? = null
+    var infoTrans1: TextView? = null
+    var time: String? = null
+    var fare: String? = null
+    var trans: String? = null
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab_time, container, false)
-    }
-
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment tab_time.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Tab_time().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        val v = inflater.inflate(R.layout.fragment_tab_time, container, false)
+        infoTime1 = v.findViewById<View>(R.id.info_time1) as TextView
+        infoFare1 = v.findViewById<View>(R.id.info_fare1) as TextView
+        infoTrans1 = v.findViewById<View>(R.id.info_trans1) as TextView
+        val bundle = arguments
+        if (bundle != null) {
+            time = bundle.getString("time")
+            fare = bundle.getString("fare")
+            trans = bundle.getString("trans")
+            infoTime1!!.text = time
+            infoFare1!!.text = fare
+            infoTrans1!!.text = trans
+        }
+        return v
     }
 }

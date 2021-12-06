@@ -9,12 +9,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
@@ -95,12 +92,6 @@ class RouteActivity : AppCompatActivity() {
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
         tabLayout.setupWithViewPager(vp)
 
-        var fragTime = Tab_time()
-        var fragDist = Tab_dist()
-        var fragFare = Tab_fare()
-
-        var bundle = Bundle()
-
         // 각 탭별 화면 설정
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -108,7 +99,7 @@ class RouteActivity : AppCompatActivity() {
                     0 -> {
                         tab.select()
                         vp.currentItem = 0
-                      
+
                         val time: String = secToMin(infoArrAll!![0][0])
                         val fare: String = "${infoArrAll!![0][2]}"
                         val trans: String = "${infoArrAll!![0][3]}"
@@ -117,7 +108,6 @@ class RouteActivity : AppCompatActivity() {
                         bundleTime.putString("fare", fare)
                         bundleTime.putString("trans", trans)
                         fragTime.arguments = bundleTime
-
                     }
                     1 -> {
                         tab.select()
@@ -131,7 +121,6 @@ class RouteActivity : AppCompatActivity() {
                         bundleDist.putString("fare", fare)
                         bundleDist.putString("trans", trans)
                         fragDist.arguments = bundleDist
-
                     }
                     2 -> {
                         tab.select()
@@ -145,14 +134,15 @@ class RouteActivity : AppCompatActivity() {
                         bundleFare.putString("fare", fare)
                         bundleFare.putString("trans", trans)
                         fragFare.arguments = bundleFare
-
                     }
                 }
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {
 
             }
-            override fun onTabReselected(tab: TabLayout.Tab) { }
+            override fun onTabReselected(tab: TabLayout.Tab) {
+
+            }
         })
 
         // 하차알림

@@ -1,59 +1,38 @@
 package kr.ac.myungji.quickunderroute
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.widget.TextView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.Fragment
+import kr.ac.myungji.quickunderroute.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [tab_dist.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Tab_dist : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    var infoTime2: TextView? = null
+    var infoFare2: TextView? = null
+    var infoTrans2: TextView? = null
+    var time: String? = null
+    var fare: String? = null
+    var trans: String? = null
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab_dist, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment tab_dist.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Tab_dist().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        val v = inflater.inflate(R.layout.fragment_tab_dist, container, false)
+        infoTime2 = v.findViewById<View>(R.id.info_time2) as TextView
+        infoFare2 = v.findViewById<View>(R.id.info_fare2) as TextView
+        infoTrans2 = v.findViewById<View>(R.id.info_trans2) as TextView
+        val bundle = arguments
+        if (bundle != null) {
+            time = bundle.getString("time")
+            fare = bundle.getString("fare")
+            trans = bundle.getString("trans")
+            infoTime2!!.text = time
+            infoFare2!!.text = fare
+            infoTrans2!!.text = trans
+        }
+        return v
     }
 }
