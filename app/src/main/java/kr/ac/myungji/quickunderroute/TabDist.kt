@@ -26,7 +26,6 @@ class TabDist : Fragment() {
     private lateinit var infoTrans: TextView
     private lateinit var infoRoute: TextView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -39,21 +38,55 @@ class TabDist : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var v: View = inflater.inflate(R.layout.fragment_tab_dist, container, false)
+        return inflater.inflate(R.layout.fragment_tab_dist, container, false)
+    }
 
-        infoTime = v.findViewById(R.id.info_time2)
-        infoDist = v.findViewById(R.id.info_dist2)
-        infoFare = v.findViewById(R.id.info_fare2)
-        infoTrans = v.findViewById(R.id.info_trans2)
-        infoRoute = v.findViewById(R.id.info_route2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        infoTime = view.findViewById(R.id.info_time2)
+        infoDist = view.findViewById(R.id.info_dist2)
+        infoFare = view.findViewById(R.id.info_fare2)
+        infoTrans = view.findViewById(R.id.info_trans2)
+        infoRoute = view.findViewById(R.id.info_route2)
 
         infoTime.text = MyApplication.prefs.getString("time2", null)
         infoDist.text = MyApplication.prefs.getString("dist2", null)
         infoFare.text = MyApplication.prefs.getString("fare2", null)
         infoTrans.text = MyApplication.prefs.getString("trans2", null)
         infoRoute.text = MyApplication.prefs.getString("route2", null)
+    }
 
-        return v
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        infoTime.text = MyApplication.prefs.getString("time2", null)
+        infoDist.text = MyApplication.prefs.getString("dist2", null)
+        infoFare.text = MyApplication.prefs.getString("fare2", null)
+        infoTrans.text = MyApplication.prefs.getString("trans2", null)
+        infoRoute.text = MyApplication.prefs.getString("route2", null)
+    }
+
+
+
+    override fun onStart() {
+        super.onStart()
+
+        infoTime.text = MyApplication.prefs.getString("time2", null)
+        infoDist.text = MyApplication.prefs.getString("dist2", null)
+        infoFare.text = MyApplication.prefs.getString("fare2", null)
+        infoTrans.text = MyApplication.prefs.getString("trans2", null)
+        infoRoute.text = MyApplication.prefs.getString("route2", null)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        infoTime.text = MyApplication.prefs.getString("time2", null)
+        infoDist.text = MyApplication.prefs.getString("dist2", null)
+        infoFare.text = MyApplication.prefs.getString("fare2", null)
+        infoTrans.text = MyApplication.prefs.getString("trans2", null)
+        infoRoute.text = MyApplication.prefs.getString("route2", null)
     }
 
     companion object {

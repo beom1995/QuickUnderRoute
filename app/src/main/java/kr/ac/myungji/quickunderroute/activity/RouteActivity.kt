@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.Tab
 
 class RouteActivity : AppCompatActivity() {
     private var alarmMgr: AlarmManager? = null
@@ -81,6 +82,12 @@ class RouteActivity : AppCompatActivity() {
                     }
                 }
             }
+            if(infoRoute != null){
+                for(i in 0 until 3) {
+                    for(j in infoRoute!![i].indices)
+                    Log.d("infoRoute[${i}][${j}]", "${infoRoute!![i][j]}")
+                }
+            }
         }
         val thread = Thread(r)
         thread.start()
@@ -100,7 +107,7 @@ class RouteActivity : AppCompatActivity() {
 
         // 각 탭별 화면 설정
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
+            override fun onTabSelected(tab: Tab) {
                 when(tab.position){
                     TIME -> {
                         tab.select()
@@ -113,8 +120,12 @@ class RouteActivity : AppCompatActivity() {
 
                         var routeString: String? = null
 
-                        for(e in infoRoute?.get(TIME)!!.indices) {
+                        for(e in infoRoute!![TIME].indices) {
+                            Log.d("ROUTESTRING1", "plus")
                             routeString.plus("${infoRoute!![TIME][e]}"+"\n")
+                        }
+                        if (routeString != null) {
+                            Log.d("ROUTESTRING1", routeString)
                         }
 
                         MyApplication.prefs.setString("time1", time)
@@ -137,6 +148,9 @@ class RouteActivity : AppCompatActivity() {
                         for(e in infoRoute?.get(DIST)!!.indices) {
                             routeString.plus("${infoRoute!![DIST][e]}"+"\n")
                         }
+                        if (routeString != null) {
+                            Log.d("ROUTESTRING1", routeString)
+                        }
 
                         MyApplication.prefs.setString("time2", time)
                         MyApplication.prefs.setString("dist2", dist)
@@ -158,6 +172,9 @@ class RouteActivity : AppCompatActivity() {
                         for(e in infoRoute?.get(FARE)!!.indices) {
                             routeString.plus("${infoRoute!![FARE][e]}"+"\n")
                         }
+                        if (routeString != null) {
+                            Log.d("ROUTESTRING1", routeString)
+                        }
 
                         MyApplication.prefs.setString("time3", time)
                         MyApplication.prefs.setString("dist3", dist)
@@ -167,10 +184,76 @@ class RouteActivity : AppCompatActivity() {
                     }
                 }
             }
-            override fun onTabUnselected(tab: TabLayout.Tab) {
+            override fun onTabUnselected(tab: Tab) {
 
             }
-            override fun onTabReselected(tab: TabLayout.Tab) { }
+            override fun onTabReselected(tab: Tab) {
+                when(tab.position){
+                    TIME -> {
+                        // tab.select()
+                        vp.currentItem = TIME
+
+                        val time: String = secToMin(infoArrAll!![TIME][0])
+                        val dist: String = "${infoArrAll!![TIME][1]}"
+                        val fare: String = "${infoArrAll!![TIME][2]}"
+                        val trans: String = "${infoArrAll!![TIME][3]}"
+
+                        var routeString: String? = null
+
+                        for(e in infoRoute?.get(TIME)!!.indices) {
+                            routeString.plus("${infoRoute!![TIME][e]}"+"\n")
+                        }
+
+                        MyApplication.prefs.setString("time1", time)
+                        MyApplication.prefs.setString("dist1", dist)
+                        MyApplication.prefs.setString("fare1", fare)
+                        MyApplication.prefs.setString("trans1", trans)
+                        MyApplication.prefs.setString("route1", routeString)
+                    }
+                    DIST -> {
+                        // tab.select()
+                        vp.currentItem = DIST
+
+                        val time: String = secToMin(infoArrAll!![DIST][0])
+                        val dist: String = "${infoArrAll!![DIST][1]}"
+                        val fare: String = "${infoArrAll!![DIST][2]}"
+                        val trans: String = "${infoArrAll!![DIST][3]}"
+
+                        var routeString: String? = null
+
+                        for(e in infoRoute?.get(DIST)!!.indices) {
+                            routeString.plus("${infoRoute!![DIST][e]}"+"\n")
+                        }
+
+                        MyApplication.prefs.setString("time2", time)
+                        MyApplication.prefs.setString("dist2", dist)
+                        MyApplication.prefs.setString("fare2", fare)
+                        MyApplication.prefs.setString("trans2", trans)
+                        MyApplication.prefs.setString("route2", routeString)
+                    }
+                    FARE -> {
+                        // tab.select()
+                        vp.currentItem = FARE
+
+                        val time: String = secToMin(infoArrAll!![FARE][0])
+                        val dist: String = "${infoArrAll!![FARE][1]}"
+                        val fare: String = "${infoArrAll!![FARE][2]}"
+                        val trans: String = "${infoArrAll!![FARE][3]}"
+
+                        var routeString: String? = null
+
+                        for(e in infoRoute?.get(FARE)!!.indices) {
+                            routeString.plus("${infoRoute!![FARE][e]}"+"\n")
+                        }
+
+                        MyApplication.prefs.setString("time3", time)
+                        MyApplication.prefs.setString("dist3", dist)
+                        MyApplication.prefs.setString("fare3", fare)
+                        MyApplication.prefs.setString("trans3", trans)
+                        MyApplication.prefs.setString("route3", routeString)
+                    }
+                }
+            }
         })
 
         // 하차알림

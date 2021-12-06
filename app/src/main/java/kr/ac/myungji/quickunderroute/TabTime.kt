@@ -39,25 +39,55 @@ class TabTime : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var v: View = inflater.inflate(R.layout.fragment_tab_time, container, false)
+        return inflater.inflate(R.layout.fragment_tab_time, container, false)
+    }
 
-        infoTime = v.findViewById(R.id.info_time1)
-        infoDist = v.findViewById(R.id.info_dist1)
-        infoFare = v.findViewById(R.id.info_fare1)
-        infoTrans = v.findViewById(R.id.info_trans1)
-        infoRoute = v.findViewById(R.id.info_route1)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        infoTime = view.findViewById(R.id.info_time1)
+        infoDist = view.findViewById(R.id.info_dist1)
+        infoFare = view.findViewById(R.id.info_fare1)
+        infoTrans = view.findViewById(R.id.info_trans1)
+        infoRoute = view.findViewById(R.id.info_route1)
 
         infoTime.text = MyApplication.prefs.getString("time1", null)
         infoDist.text = MyApplication.prefs.getString("dist1", null)
         infoFare.text = MyApplication.prefs.getString("fare1", null)
         infoTrans.text = MyApplication.prefs.getString("trans1", null)
         infoRoute.text = MyApplication.prefs.getString("route1", null)
-
-        MyApplication.prefs.getString("time1", null)?.let { Log.d("TTTTTTTTTTT1", it) }
-
-
-        return v
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        infoTime.text = MyApplication.prefs.getString("time1", null)
+        infoDist.text = MyApplication.prefs.getString("dist1", null)
+        infoFare.text = MyApplication.prefs.getString("fare1", null)
+        infoTrans.text = MyApplication.prefs.getString("trans1", null)
+        infoRoute.text = MyApplication.prefs.getString("route1", null)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        infoTime.text = MyApplication.prefs.getString("time1", null)
+        infoDist.text = MyApplication.prefs.getString("dist1", null)
+        infoFare.text = MyApplication.prefs.getString("fare1", null)
+        infoTrans.text = MyApplication.prefs.getString("trans1", null)
+        infoRoute.text = MyApplication.prefs.getString("route1", null)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        infoTime.text = MyApplication.prefs.getString("time1", null)
+        infoDist.text = MyApplication.prefs.getString("dist1", null)
+        infoFare.text = MyApplication.prefs.getString("fare1", null)
+        infoTrans.text = MyApplication.prefs.getString("trans1", null)
+        infoRoute.text = MyApplication.prefs.getString("route1", null)
+    }
+
 
     companion object {
         /**

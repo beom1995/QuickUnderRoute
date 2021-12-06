@@ -98,11 +98,11 @@ class RouteComputing() {
         } else {
             dijkstraCommon(src, dstn, TIME)
         }
-        infoArrTime[0] = cost[dstn]
+        infoArrTime[TIME] = cost[dstn]
         traceRoute(src, dstn, TIME)
         getTransCnt(src, dstn, TIME)
 
-        for(i in infoRoute.indices) {
+        for(i in infoRoute[TIME].indices) {
             passby++
             preTrace = curTrace
             curTrace = infoRoute[TIME][i]
@@ -131,16 +131,16 @@ class RouteComputing() {
         passby = 0
 
         if(via != null){
-            dijkstraCommon(src, via, 1)
-            dijkstraCommon(via, dstn, 1)
+            dijkstraCommon(src, via, DIST)
+            dijkstraCommon(via, dstn, DIST)
         } else {
-            dijkstraCommon(src, dstn, 1)
+            dijkstraCommon(src, dstn, DIST)
         }
-        infoArrDist[1] = cost[dstn]
+        infoArrDist[DIST] = cost[dstn]
         traceRoute(src, dstn, DIST)
         getTransCnt(src, dstn, DIST)
 
-        for(i in infoRoute.indices) {
+        for(i in infoRoute[DIST].indices) {
             passby++
             preTrace = curTrace
             curTrace = infoRoute[DIST][i]
@@ -169,17 +169,17 @@ class RouteComputing() {
         passby = 0
 
         if(via != null){
-            dijkstraCommon(src, via, 2)
-            dijkstraCommon(via, dstn, 2)
+            dijkstraCommon(src, via, FARE)
+            dijkstraCommon(via, dstn, FARE)
         } else {
-            dijkstraCommon(src, dstn, 2)
+            dijkstraCommon(src, dstn, FARE)
         }
 
-        infoArrFare[2] = cost[dstn]
+        infoArrFare[FARE] = cost[dstn]
         traceRoute(src, dstn, FARE)
         getTransCnt(src, dstn, FARE)
 
-        for(i in infoRoute.indices) {
+        for(i in infoRoute[FARE].indices) {
             passby++
             preTrace = curTrace
             curTrace = infoRoute[FARE][i]
