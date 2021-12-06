@@ -17,7 +17,6 @@ import kr.ac.myungji.quickunderroute.R;
 public class FavoritesActivity extends Activity {
     private ListView listView;
 
-    Button btnInit;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

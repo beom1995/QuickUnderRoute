@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Message
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import android.widget.*
@@ -20,11 +21,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.coroutines.*
-import kr.ac.myungji.quickunderroute.activity.FavoritesActivity
-import kr.ac.myungji.quickunderroute.activity.LostActivity
-import kr.ac.myungji.quickunderroute.activity.RouteActivity
-import kr.ac.myungji.quickunderroute.activity.StationActivity
+import kr.ac.myungji.quickunderroute.activity.*
+import kr.ac.myungji.quickunderroute.databinding.ActivityMainBinding
 import kr.ac.myungji.quickunderroute.entity.RoomStation
 import java.lang.Runnable
 import java.util.*
@@ -49,6 +49,7 @@ class MyApp: Application() {
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     // UI 관련 변수
+    private lateinit var binding : ActivityMainBinding
     private lateinit var webView: WebView
     private var toolbar: Toolbar? = null
     private lateinit var navigationView: NavigationView
@@ -69,13 +70,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // 어플 최초 구동 확인 및 상태 저장
         val pref = getSharedPreferences("pref", MODE_PRIVATE)
         val first = pref.getBoolean("isFirst", false)
-        if (first == false) {
+        if (!first) {
             val editor = pref.edit()
             editor.putBoolean("isFirst", true)
             editor.putInt("num", 0)
             editor.putInt("timeDelete",0)
             editor.commit()
         }
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        val slidePanel = binding.slideLayout                      // SlidingUpPanel
+        slidePanel.addPanelSlideListener(PanelEventListener())  // 이벤트 리스너 추가
+
+        slidePanel.setFadeOnClickListener(View.OnClickListener() {
+            @Override
+            fun onClick(view: View) {
+                slidePanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
+        })
 
         // 액션바(타이틀바) 없애기
         var actionBar: ActionBar? = supportActionBar
@@ -222,7 +237,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
             }
             R.id.btn_notice -> {
-                displayMessage("notice selected")
+                val intent = Intent(this, NoticeActivity::class.java)
+                startActivity(intent)
             }
             R.id.btn_lost -> {
                 val intent = Intent(this, LostActivity::class.java)
@@ -242,6 +258,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawerLayout.closeDrawers()
         } else {
             super.onBackPressed()
+        }
+    }
+
+
+
+    // 슬라이딩업패널 리스너
+    inner class PanelEventListener : SlidingUpPanelLayout.PanelSlideListener {
+        // 패널이 슬라이드 중일 때
+        override fun onPanelSlide(panel: View?, slideOffset: Float) {
+        }
+
+        // 패널의 상태가 변했을 때
+        override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
         }
     }
 
@@ -297,7 +326,7 @@ class WebViewConnector(val context: Context) : AppCompatActivity(){
     fun getStationInfo(no: String) {
         val intent = Intent(context, StationActivity::class.java)
         intent.putExtra("no", no)
-        Log.d("webview", no)
         startActivity(intent)
     }
+
 }

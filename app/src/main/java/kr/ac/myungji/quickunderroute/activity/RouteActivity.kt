@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -30,9 +31,9 @@ class RouteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)
 
-        val fragTime: Fragment = tab_time()
-        val fragDist: Fragment = tab_dist()
-        val fragFare: Fragment = tab_fare()
+        val fragTime: Fragment = Tab_time()
+        val fragDist: Fragment = Tab_dist()
+        val fragFare: Fragment = Tab_fare()
         val bundleTime = Bundle()
         val bundleDist = Bundle()
         val bundleFare = Bundle()
@@ -84,20 +85,30 @@ class RouteActivity : AppCompatActivity() {
         // tabLayout에서 viewpaging 사용
         var vp: ViewPager = findViewById(R.id.view_pager)
         var adapter: VPAdapter = VPAdapter(supportFragmentManager)
+
         adapter.addFragment(fragTime, "최단시간")
         adapter.addFragment(fragDist, "최단거리")
         adapter.addFragment(fragFare, "최소요금")
+
         vp.adapter = adapter
 
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
         tabLayout.setupWithViewPager(vp)
+
+        var fragTime = Tab_time()
+        var fragDist = Tab_dist()
+        var fragFare = Tab_fare()
+
+        var bundle = Bundle()
 
         // 각 탭별 화면 설정
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when(tab.position){
                     0 -> {
+                        tab.select()
                         vp.currentItem = 0
+                      
                         val time: String = secToMin(infoArrAll!![0][0])
                         val fare: String = "${infoArrAll!![0][2]}"
                         val trans: String = "${infoArrAll!![0][3]}"
@@ -106,9 +117,12 @@ class RouteActivity : AppCompatActivity() {
                         bundleTime.putString("fare", fare)
                         bundleTime.putString("trans", trans)
                         fragTime.arguments = bundleTime
+
                     }
                     1 -> {
+                        tab.select()
                         vp.currentItem = 1
+
                         val time: String = secToMin(infoArrAll!![1][0])
                         val fare: String = "${infoArrAll!![1][2]}"
                         val trans: String = "${infoArrAll!![1][3]}"
@@ -117,9 +131,12 @@ class RouteActivity : AppCompatActivity() {
                         bundleDist.putString("fare", fare)
                         bundleDist.putString("trans", trans)
                         fragDist.arguments = bundleDist
+
                     }
                     2 -> {
+                        tab.select()
                         vp.currentItem = 2
+
                         val time: String = secToMin(infoArrAll!![2][0])
                         val fare: String = "${infoArrAll!![2][2]}"
                         val trans: String = "${infoArrAll!![2][3]}"
@@ -128,6 +145,7 @@ class RouteActivity : AppCompatActivity() {
                         bundleFare.putString("fare", fare)
                         bundleFare.putString("trans", trans)
                         fragFare.arguments = bundleFare
+
                     }
                 }
             }
@@ -176,7 +194,13 @@ class RouteActivity : AppCompatActivity() {
         hour = min / 60
         min %= 60
 
-        return hour.toString() + "시간 " + min.toString() + "분"
+        var result: String
+        if(hour > 0) {
+            result = hour.toString() + "시간 " + min.toString() + "분"
+        } else {
+            result = min.toString() + "분"
+        }
+        return result
     }
 
     // 하차 알림을 설정한다.
@@ -188,7 +212,7 @@ class RouteActivity : AppCompatActivity() {
 
         alarmMgr?.set(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + infoArrAll!![0][0] * 1000,
+            SystemClock.elapsedRealtime() + (infoArrAll!![0][0] - 180) * 1000,
             alarmIntent
         )
     }
