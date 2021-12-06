@@ -120,11 +120,11 @@ class RouteActivity : AppCompatActivity() {
         btnGetoffAlarm.setOnClickListener {
             if (isAlarmSet) {
                 cancelAlarm()
-                btnGetoffAlarm.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
+                btnGetoffAlarm.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F2E2C6"))
                 isAlarmSet = false
             } else {
                 setAlarm()
-                btnGetoffAlarm.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C92424"))
+                btnGetoffAlarm.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF0000"))
                 isAlarmSet = true
             }
         }
