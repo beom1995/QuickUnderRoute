@@ -4,7 +4,7 @@
     android:id="@+id/frag_time"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".tab_time">
+    tools:context=".Tab_time">
 
     <TableLayout
         android:layout_width="match_parent"

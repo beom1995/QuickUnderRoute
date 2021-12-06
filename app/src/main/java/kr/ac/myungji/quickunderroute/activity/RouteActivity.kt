@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -29,22 +30,6 @@ class RouteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)
-
-        // 부속 화면(fragment)
-        val fragTime = layoutInflater.inflate(R.layout.fragment_tab_time, null, false)
-        val fragDist = layoutInflater.inflate(R.layout.fragment_tab_dist, null, false)
-        val fragFare = layoutInflater.inflate(R.layout.fragment_tab_fare, null, false)
-
-        // 정보를 표시할 화면 요소
-        var infoEstiTime1: TextView = fragTime.findViewById(R.id.info_time1)
-        var infoEstiTime2: TextView = fragDist.findViewById(R.id.info_time2)
-        var infoEstiTime3: TextView = fragFare.findViewById(R.id.info_time3)
-        var infoFare1: TextView = fragTime.findViewById(R.id.info_fare1)
-        var infoFare2: TextView = fragDist.findViewById(R.id.info_fare2)
-        var infoFare3: TextView = fragFare.findViewById(R.id.info_fare3)
-        var infoTrans1: TextView = fragTime.findViewById(R.id.info_trans1)
-        var infoTrans2: TextView = fragDist.findViewById(R.id.info_trans2)
-        var infoTrans3: TextView = fragFare.findViewById(R.id.info_trans3)
 
         // 경로 검색 정보 받아오기
         var src: Int = MyApplication.prefs.getInt("src", 0)
@@ -77,35 +62,44 @@ class RouteActivity : AppCompatActivity() {
         // tabLayout에서 viewpaging 사용
         var vp: ViewPager = findViewById(R.id.view_pager)
         var adapter: VPAdapter = VPAdapter(supportFragmentManager)
-        adapter.addFragment(tab_time(), "최단시간")
-        adapter.addFragment(tab_dist(), "최단거리")
-        adapter.addFragment(tab_fare(), "최소요금")
+        adapter.addFragment(Tab_time(), "최단시간")
+        adapter.addFragment(Tab_dist(), "최단거리")
+        adapter.addFragment(Tab_fare(), "최소요금")
         vp.adapter = adapter
 
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
         tabLayout.setupWithViewPager(vp)
+
+        var fragTime = Tab_time()
+        var fragDist = Tab_dist()
+        var fragFare = Tab_fare()
+
+        var bundle = Bundle()
 
         // 각 탭별 화면 설정
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when(tab.position){
                     0 -> {
+                        tab.select()
                         vp.currentItem = 0
-                        infoEstiTime1.setText(secToMin(infoArrAll!![0][0]))
-                        infoFare1.setText("${infoArrAll!![0][2]}")
-                        infoTrans1.setText("${infoArrAll!![0][3]}")
+                        bundle.putString("time", secToMin(infoArrAll!![1][0]))
+                        bundle.putString("dist", "${infoArrAll!![1][1]}")
+                        bundle.putString("fare", "${infoArrAll!![1][2]}")
+                        bundle.putString("trans", "${infoArrAll!![1][3]}")
+                        fragTime.arguments = bundle
+
+                        supportFragmentManager!!.beginTransaction()
+                            .replace(R.id.tab_time, fragTime)
+                            .commit()
                     }
                     1 -> {
+                        tab.select()
                         vp.currentItem = 1
-                        infoEstiTime2.setText(secToMin(infoArrAll!![1][0]))
-                        infoFare2.setText("${infoArrAll!![1][2]}")
-                        infoTrans2.setText("${infoArrAll!![1][3]}")
                     }
                     2 -> {
+                        tab.select()
                         vp.currentItem = 2
-                        infoEstiTime3.setText(secToMin(infoArrAll!![2][0]))
-                        infoFare3.setText("${infoArrAll!![2][2]}")
-                        infoTrans3.setText("${infoArrAll!![2][3]}")
                     }
                 }
             }
@@ -154,7 +148,13 @@ class RouteActivity : AppCompatActivity() {
         hour = min / 60
         min %= 60
 
-        return hour.toString() + "시간 " + min.toString() + "분"
+        var result: String
+        if(hour > 0) {
+            result = hour.toString() + "시간 " + min.toString() + "분"
+        } else {
+            result = min.toString() + "분"
+        }
+        return result
     }
 
     // 하차 알림을 설정한다.
@@ -166,7 +166,7 @@ class RouteActivity : AppCompatActivity() {
 
         alarmMgr?.set(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + infoArrAll!![0][0] * 1000,
+            SystemClock.elapsedRealtime() + (infoArrAll!![0][0] - 180) * 1000,
             alarmIntent
         )
     }

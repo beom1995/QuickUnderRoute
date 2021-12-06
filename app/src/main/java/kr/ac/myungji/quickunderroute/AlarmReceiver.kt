@@ -1,5 +1,6 @@
 package kr.ac.myungji.quickunderroute
 
+import android.app.Notification.EXTRA_NOTIFICATION_ID
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -16,7 +17,7 @@ class AlarmReceiver : BroadcastReceiver() {
     companion object {
         const val TAG = "AlarmReceiver"
         const val NOTIFICATION_ID = 0
-        const val PRIMARY_CHANNEL_ID = "primary_notification_channel"
+        const val PRIMARY_CHANNEL_ID = "Get Off Timer"
     }
 
     lateinit var notificationManager: NotificationManager
@@ -38,10 +39,10 @@ class AlarmReceiver : BroadcastReceiver() {
             contentIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val builder =
-            NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
+
+        val builder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.alarm_on)
-                .setContentTitle("하차알림")
+                .setContentTitle("하차 알림")
                 .setContentText("3분 뒤에 도착합니다.")
                 .setContentIntent(contentPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -51,7 +52,7 @@ class AlarmReceiver : BroadcastReceiver() {
         notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
-    fun createNotificationChannel() {
+    private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 PRIMARY_CHANNEL_ID,
