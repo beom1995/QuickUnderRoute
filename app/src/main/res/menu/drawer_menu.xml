@@ -6,7 +6,7 @@
     <item
         android:id="@+id/btn_fav"
         android:title="즐겨찾기"
-        android:icon="@drawable/alarm_off"
+        android:icon="@drawable/ic_baseline_star_24"
         />
 
     <item
@@ -18,13 +18,13 @@
     <item
         android:id="@+id/btn_lost"
         android:title="유실물센터"
-        android:icon="@drawable/alarm_off"
+        android:icon="@drawable/ic_baseline_leave_bags_at_home_24"
         />
 
     <item
         android:id="@+id/btn_settings"
         android:title="설정"
-        android:icon="@drawable/alarm_off"
+        android:icon="@drawable/ic_baseline_settings_24"
         />
 
 </group>
