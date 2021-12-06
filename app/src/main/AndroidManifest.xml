@@ -27,6 +27,7 @@
         <activity android:name=".activity.LostActivity" />
         <activity android:name=".activity.RouteActivity" />
         <activity android:name=".activity.StationActivity" />
+        <activity android:name=".activity.NoticeActivity" />
         <receiver
             android:name=".AlarmReceiver"
             android:exported="false">

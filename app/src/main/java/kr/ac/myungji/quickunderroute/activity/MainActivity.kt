@@ -21,10 +21,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.*
-import kr.ac.myungji.quickunderroute.activity.FavoritesActivity
-import kr.ac.myungji.quickunderroute.activity.LostActivity
-import kr.ac.myungji.quickunderroute.activity.RouteActivity
-import kr.ac.myungji.quickunderroute.activity.StationActivity
+import kr.ac.myungji.quickunderroute.activity.*
 import kr.ac.myungji.quickunderroute.entity.RoomStation
 import java.lang.Runnable
 import java.util.*
@@ -222,7 +219,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
             }
             R.id.btn_notice -> {
-                displayMessage("notice selected")
+                val intent = Intent(this, NoticeActivity::class.java)
+                startActivity(intent)
             }
             R.id.btn_lost -> {
                 val intent = Intent(this, LostActivity::class.java)
