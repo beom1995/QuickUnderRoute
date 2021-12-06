@@ -1,6 +1,5 @@
 package kr.ac.myungji.quickunderroute
 
-import android.app.Notification.EXTRA_NOTIFICATION_ID
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -11,6 +10,7 @@ import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import kr.ac.myungji.quickunderroute.activity.MainActivity
 
 class AlarmReceiver : BroadcastReceiver() {
 

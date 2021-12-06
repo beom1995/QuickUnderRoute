@@ -2,9 +2,12 @@ package kr.ac.myungji.quickunderroute
 
 import android.content.Context
 import android.util.Log
+import kr.ac.myungji.quickunderroute.activity.MainActivity.Companion.TIME
+import kr.ac.myungji.quickunderroute.activity.MainActivity.Companion.DIST
+import kr.ac.myungji.quickunderroute.activity.MainActivity.Companion.FARE
 import kr.ac.myungji.quickunderroute.entity.RoomEdge
-import kr.ac.myungji.quickunderroute.MyApp.Companion.getApplicationContext
 import kr.ac.myungji.quickunderroute.entity.RoomStation
+import kr.ac.myungji.quickunderroute.activity.MyApp.Companion.getApplicationContext
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -24,13 +27,13 @@ class RouteComputing() {
 
     private lateinit var curNode: Node      // 경로 계산 중 현재 위치한 노드
     private var q = PriorityQueue<Node>()   // minheap을 이용하여 가장 적은 비용을 가진 경로를 계산
-    private var stack: Stack<Int> = Stack<Int>()    // 경로 추적을 위해 사용
-    
+    var infoRoute: ArrayList<ArrayList<Int>> = ArrayList<ArrayList<Int>>()
+
     // 1:소요시간, 2:거리, 3:요금, 4:환승횟수
     var infoArrTime: Array<Int> = Array<Int>(4) {0}
     var infoArrDist: Array<Int> = Array<Int>(4) {0}
     var infoArrFare: Array<Int> = Array<Int>(4) {0}
-    var infoArrAll: Array<Array<Int>> = arrayOf(infoArrTime, infoArrDist, infoArrFare)  // 경로 계산 결과 
+    var infoArrAll: Array<Array<Int>> = arrayOf(infoArrTime, infoArrDist, infoArrFare)  // 경로 계산 결과
 
     init {
         val appContext: Context = getApplicationContext()
@@ -49,25 +52,30 @@ class RouteComputing() {
             }
 
             for (j in 0 until lastStNo) {
-                graph[0].add(ArrayList<Node>())
-                graph[1].add(ArrayList<Node>())
-                graph[2].add(ArrayList<Node>())
+                graph[TIME].add(ArrayList<Node>())
+                graph[DIST].add(ArrayList<Node>())
+                graph[FARE].add(ArrayList<Node>())
             }
 
             // 인접리스트
             for (i in edgeList!!.indices) {
-                graph[0][edgeList!![i].src].add(Node(edgeList!![i].dstn, edgeList!![i].timeSec))
-                graph[0][edgeList!![i].dstn].add(Node(edgeList!![i].src, edgeList!![i].timeSec))
+                graph[TIME][edgeList!![i].src].add(Node(edgeList!![i].dstn, edgeList!![i].timeSec))
+                graph[TIME][edgeList!![i].dstn].add(Node(edgeList!![i].src, edgeList!![i].timeSec))
 
-                graph[1][edgeList!![i].src].add(Node(edgeList!![i].dstn, edgeList!![i].distanceM))
-                graph[1][edgeList!![i].dstn].add(Node(edgeList!![i].src, edgeList!![i].distanceM))
+                graph[DIST][edgeList!![i].src].add(Node(edgeList!![i].dstn, edgeList!![i].distanceM))
+                graph[DIST][edgeList!![i].dstn].add(Node(edgeList!![i].src, edgeList!![i].distanceM))
 
-                graph[2][edgeList!![i].src].add(Node(edgeList!![i].dstn, edgeList!![i].fareWon))
-                graph[2][edgeList!![i].dstn].add(Node(edgeList!![i].src, edgeList!![i].fareWon))
+                graph[FARE][edgeList!![i].src].add(Node(edgeList!![i].dstn, edgeList!![i].fareWon))
+                graph[FARE][edgeList!![i].dstn].add(Node(edgeList!![i].src, edgeList!![i].fareWon))
             }
         }
         val thread = Thread(r)
         thread.start()
+
+        for (o in 0 until 3) {
+            infoRoute.add(ArrayList<Int>())
+        }
+
     }
 
     // 최단시간, 최단거리, 최저요금 다익스트라 계산
@@ -85,18 +93,19 @@ class RouteComputing() {
         curNode = Node(src, 0)
 
         if(via != null){
-            dijkstraCommon(src, via, 0)
-            dijkstraCommon(via, dstn, 0)
+            dijkstraCommon(src, via, TIME)
+            dijkstraCommon(via, dstn, TIME)
         } else {
-            dijkstraCommon(src, dstn, 0)
+            dijkstraCommon(src, dstn, TIME)
         }
         infoArrTime[0] = cost[dstn]
-        traceRoute(src, dstn)
+        traceRoute(src, dstn, TIME)
+        getTransCnt(src, dstn, TIME)
 
-        while(!stack.isEmpty()){
+        for(i in infoRoute.indices) {
             passby++
             preTrace = curTrace
-            curTrace = stack.pop()
+            curTrace = infoRoute[TIME][i]
             Log.d("trace$passby", curTrace.toString())
 
             for (j in edgeList!!.indices) {
@@ -107,7 +116,6 @@ class RouteComputing() {
                     || (edgeList!![j].dstn == preTrace && edgeList!![j].src == curTrace)) {
                     infoArrTime[1] += edgeList!![j].distanceM
                     infoArrTime[2] += edgeList!![j].fareWon
-                    infoArrTime[3] += db!!.roomStationDao().getStationTransSt(curTrace)
                 }
             }
         }
@@ -129,12 +137,13 @@ class RouteComputing() {
             dijkstraCommon(src, dstn, 1)
         }
         infoArrDist[1] = cost[dstn]
-        traceRoute(src, dstn)
+        traceRoute(src, dstn, DIST)
+        getTransCnt(src, dstn, DIST)
 
-        while(!stack.isEmpty()){
+        for(i in infoRoute.indices) {
             passby++
             preTrace = curTrace
-            curTrace = stack.pop()
+            curTrace = infoRoute[DIST][i]
             Log.d("trace$passby", curTrace.toString())
 
             for (j in edgeList!!.indices) {
@@ -145,7 +154,6 @@ class RouteComputing() {
                     || (edgeList!![j].dstn == preTrace && edgeList!![j].src == curTrace)) {
                     infoArrDist[0] += edgeList!![j].timeSec
                     infoArrDist[2] += edgeList!![j].fareWon
-                    infoArrDist[3] += db!!.roomStationDao().getStationTransSt(curTrace)
                 }
             }
         }
@@ -168,12 +176,13 @@ class RouteComputing() {
         }
 
         infoArrFare[2] = cost[dstn]
-        traceRoute(src, dstn)
+        traceRoute(src, dstn, FARE)
+        getTransCnt(src, dstn, FARE)
 
-        while(!stack.isEmpty()){
+        for(i in infoRoute.indices) {
             passby++
             preTrace = curTrace
-            curTrace = stack.pop()
+            curTrace = infoRoute[FARE][i]
             Log.d("trace$passby", curTrace.toString())
 
             for (j in edgeList!!.indices) {
@@ -184,13 +193,11 @@ class RouteComputing() {
                     || (edgeList!![j].dstn == preTrace && edgeList!![j].src == curTrace)) {
                     infoArrFare[0] += edgeList!![j].timeSec
                     infoArrFare[1] += edgeList!![j].distanceM
-                    infoArrFare[3] += db!!.roomStationDao().getStationTransSt(curTrace)
                 }
             }
         }
         q.clear()
 
-        correctTransCnt(dstn)
         return infoArrAll
     }
 
@@ -226,24 +233,29 @@ class RouteComputing() {
     }
 
     // 최소비용 계산한 경로 추적
-    private fun traceRoute(src: Int, dstn: Int){
+    private fun traceRoute(src: Int, dstn: Int, type: Int){
         var cur = dstn
 
         while(cur != src) {
-            stack.push(cur)
+            infoRoute[type].add(cur)
             cur = trace[cur]
         }
-        stack.push(cur)
+        infoRoute[type].add(cur)
     }
 
-    // 환승역 개수 보정
-    private fun correctTransCnt(dstn: Int) {
-        // 도착역은 환승역이어도 환승으로 계산 안 함
+    // 최소비용 계산한 경로 제공
+    fun getRoute() : ArrayList<ArrayList<Int>> {
+        return infoRoute
+    }
+
+    // 환승 횟수 계산
+    private fun getTransCnt(src: Int, dstn: Int, type: Int) {
         val s = Runnable {
-            if(db!!.roomStationDao().getStationTransSt(dstn) == 1){
-                infoArrTime[3] -= 1
-                infoArrDist[3] -= 1
-                infoArrFare[3] -= 1
+            for(e in infoRoute.indices) {
+                if ((src != infoRoute[type][e] || dstn != infoRoute[type][e])
+                    && db!!.roomStationDao().getStationTransSt(infoRoute[type][e]) == 1) {
+                    infoArrAll[type][3] += 1
+                }
             }
         }
         val thread = Thread(s)

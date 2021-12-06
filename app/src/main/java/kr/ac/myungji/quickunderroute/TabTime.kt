@@ -1,32 +1,47 @@
 package kr.ac.myungji.quickunderroute
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [tab_time.newInstance] factory method to
+ * Use the [TabTime.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Tab_time : Fragment() {
-    // TODO: Rename and change types of parameters
+class TabTime : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
+
+    private var time: String? = null
+    private var dist: String? = null
+    private var fare: String? = null
+    private var trans: String? = null
+    private var route: String? = null
+
+    private lateinit var infoTime: TextView
+    private lateinit var infoDist: TextView
+    private lateinit var infoFare: TextView
+    private lateinit var infoTrans: TextView
+    private lateinit var infoRoute: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+            time = it.getString("time")
+            dist = it.getString("dist")
+            fare = it.getString("fare")
+            trans = it.getString("trans")
+            route = it.getString("routeString")
         }
     }
 
@@ -34,10 +49,21 @@ class Tab_time : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab_time, container, false)
-    }
+        var v: View = inflater.inflate(R.layout.fragment_tab_time, container, false)
 
+        infoTime = v.findViewById(R.id.info_time1)
+        infoDist = v.findViewById(R.id.info_dist1)
+        infoFare = v.findViewById(R.id.info_fare1)
+        infoTrans = v.findViewById(R.id.info_trans1)
+        infoRoute = v.findViewById(R.id.info_route1)
+
+        infoTime.text = time
+        infoDist.text = dist
+        infoFare.text = fare
+        infoTrans.text = trans
+        infoRoute.text = route
+        return v
+    }
 
     companion object {
         /**
@@ -51,7 +77,7 @@ class Tab_time : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            Tab_time().apply {
+            TabTime().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

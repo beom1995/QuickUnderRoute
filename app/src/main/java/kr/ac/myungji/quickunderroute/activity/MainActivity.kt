@@ -1,4 +1,4 @@
-package kr.ac.myungji.quickunderroute
+package kr.ac.myungji.quickunderroute.activity
 
 import android.annotation.SuppressLint
 import android.app.Application
@@ -23,8 +23,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.coroutines.*
+import kr.ac.myungji.quickunderroute.AppDatabase
+import kr.ac.myungji.quickunderroute.DatabaseCopier
+import kr.ac.myungji.quickunderroute.R
 import kr.ac.myungji.quickunderroute.activity.*
-import kr.ac.myungji.quickunderroute.databinding.ActivityMainBinding
 import kr.ac.myungji.quickunderroute.entity.RoomStation
 import java.lang.Runnable
 import java.util.*
@@ -48,8 +50,13 @@ class MyApp: Application() {
 }
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    companion object {
+        const val TIME: Int = 0
+        const val DIST: Int = 1
+        const val FARE: Int = 2
+    }
+
     // UI 관련 변수
-    private lateinit var binding : ActivityMainBinding
     private lateinit var webView: WebView
     private var toolbar: Toolbar? = null
     private lateinit var navigationView: NavigationView
@@ -77,20 +84,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             editor.putInt("timeDelete",0)
             editor.commit()
         }
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
-        val slidePanel = binding.slideLayout                      // SlidingUpPanel
-        slidePanel.addPanelSlideListener(PanelEventListener())  // 이벤트 리스너 추가
-
-        slidePanel.setFadeOnClickListener(View.OnClickListener() {
-            @Override
-            fun onClick(view: View) {
-                slidePanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-            }
-        })
 
         // 액션바(타이틀바) 없애기
         var actionBar: ActionBar? = supportActionBar

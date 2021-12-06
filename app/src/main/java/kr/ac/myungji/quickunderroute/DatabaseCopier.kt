@@ -18,7 +18,6 @@ object DatabaseCopier {
     private const val DATABASE_NAME = "subwayDB.db"
     private var INSTANCE: AppDatabase? = null
 
-
     // DB 인스턴스 생성
     fun getAppDataBase(context: Context): AppDatabase?{
 
@@ -63,7 +62,6 @@ object DatabaseCopier {
                 Log.d(TAG, "버전 코드 다름!")
                 copyDB(context, dbPath)
             }
-
 
             return
         }
