@@ -70,7 +70,6 @@ public class FavoritesActivity extends Activity {
         }
         adapter.notifyDataSetChanged();
 
-
         //즐겨찾기 항목을 누르면 해당 역 정보로 이동
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

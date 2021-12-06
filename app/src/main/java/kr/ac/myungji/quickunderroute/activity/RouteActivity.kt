@@ -31,6 +31,29 @@ class RouteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)
 
+        val fragTime: Fragment = Tab_time()
+        val fragDist: Fragment = Tab_dist()
+        val fragFare: Fragment = Tab_fare()
+        val bundleTime = Bundle()
+        val bundleDist = Bundle()
+        val bundleFare = Bundle()
+
+        // 부속 화면(fragment)
+//        val fragTime = layoutInflater.inflate(R.layout.fragment_tab_time, null, false)
+//        val fragDist = layoutInflater.inflate(R.layout.fragment_tab_dist, null, false)
+//        val fragFare = layoutInflater.inflate(R.layout.fragment_tab_fare, null, false)
+
+        // 정보를 표시할 화면 요소
+//        var infoEstiTime1: TextView = fragTime.findViewById(R.id.info_time1)
+//        var infoEstiTime2: TextView = fragDist.findViewById(R.id.info_time2)
+//        var infoEstiTime3: TextView = fragFare.findViewById(R.id.info_time3)
+//        var infoFare1: TextView = fragTime.findViewById(R.id.info_fare1)
+//        var infoFare2: TextView = fragDist.findViewById(R.id.info_fare2)
+//        var infoFare3: TextView = fragFare.findViewById(R.id.info_fare3)
+//        var infoTrans1: TextView = fragTime.findViewById(R.id.info_trans1)
+//        var infoTrans2: TextView = fragDist.findViewById(R.id.info_trans2)
+//        var infoTrans3: TextView = fragFare.findViewById(R.id.info_trans3)
+
         // 경로 검색 정보 받아오기
         var src: Int = MyApplication.prefs.getInt("src", 0)
         var dstn: Int = MyApplication.prefs.getInt("dstn", 0)
@@ -62,9 +85,11 @@ class RouteActivity : AppCompatActivity() {
         // tabLayout에서 viewpaging 사용
         var vp: ViewPager = findViewById(R.id.view_pager)
         var adapter: VPAdapter = VPAdapter(supportFragmentManager)
-        adapter.addFragment(Tab_time(), "최단시간")
-        adapter.addFragment(Tab_dist(), "최단거리")
-        adapter.addFragment(Tab_fare(), "최소요금")
+
+        adapter.addFragment(fragTime, "최단시간")
+        adapter.addFragment(fragDist, "최단거리")
+        adapter.addFragment(fragFare, "최소요금")
+
         vp.adapter = adapter
 
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
@@ -83,23 +108,44 @@ class RouteActivity : AppCompatActivity() {
                     0 -> {
                         tab.select()
                         vp.currentItem = 0
-                        bundle.putString("time", secToMin(infoArrAll!![1][0]))
-                        bundle.putString("dist", "${infoArrAll!![1][1]}")
-                        bundle.putString("fare", "${infoArrAll!![1][2]}")
-                        bundle.putString("trans", "${infoArrAll!![1][3]}")
-                        fragTime.arguments = bundle
+                      
+                        val time: String = secToMin(infoArrAll!![0][0])
+                        val fare: String = "${infoArrAll!![0][2]}"
+                        val trans: String = "${infoArrAll!![0][3]}"
 
-                        supportFragmentManager!!.beginTransaction()
-                            .replace(R.id.tab_time, fragTime)
-                            .commit()
+                        bundleTime.putString("time", time)
+                        bundleTime.putString("fare", fare)
+                        bundleTime.putString("trans", trans)
+                        fragTime.arguments = bundleTime
+
                     }
                     1 -> {
                         tab.select()
                         vp.currentItem = 1
+
+                        val time: String = secToMin(infoArrAll!![1][0])
+                        val fare: String = "${infoArrAll!![1][2]}"
+                        val trans: String = "${infoArrAll!![1][3]}"
+
+                        bundleDist.putString("time", time)
+                        bundleDist.putString("fare", fare)
+                        bundleDist.putString("trans", trans)
+                        fragDist.arguments = bundleDist
+
                     }
                     2 -> {
                         tab.select()
                         vp.currentItem = 2
+
+                        val time: String = secToMin(infoArrAll!![2][0])
+                        val fare: String = "${infoArrAll!![2][2]}"
+                        val trans: String = "${infoArrAll!![2][3]}"
+
+                        bundleFare.putString("time", time)
+                        bundleFare.putString("fare", fare)
+                        bundleFare.putString("trans", trans)
+                        fragFare.arguments = bundleFare
+
                     }
                 }
             }
