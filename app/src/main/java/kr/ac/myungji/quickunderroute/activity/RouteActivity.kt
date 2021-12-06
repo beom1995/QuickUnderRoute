@@ -58,7 +58,6 @@ class RouteActivity : AppCompatActivity() {
         MyApplication.prefs.setString("via", null)
         MyApplication.prefs.setInt("dstn", 0)
 
-
         val r = Runnable {
             infoArrAll = routeCompute.dijkstra(src, via, dstn)
 
@@ -84,27 +83,28 @@ class RouteActivity : AppCompatActivity() {
         // 각 탭별 화면 설정
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                tab.select()
                 when(tab.position){
                     0 -> {
-                        vp.setCurrentItem(0)
-                        infoEstiTime1.setText(secToMin(infoArrAll!![0][0]))
-                        infoFare1.setText(infoArrAll!![0][2])
-                        infoTrans1.setText(infoArrAll!![0][3])
+                        tab.select()
+                        vp.currentItem = 0
+                        infoEstiTime1.text = secToMin(infoArrAll!![0][0])
+                        infoFare1.text = "${infoArrAll!![0][2]}"
+                        infoTrans1.text = "${infoArrAll!![0][3]}"
                     }
                     1 -> {
-                        vp.setCurrentItem(1)
-                        infoEstiTime2.setText(secToMin(infoArrAll!![1][0]))
-                        infoFare2.setText(infoArrAll!![1][2])
-                        infoTrans2.setText(infoArrAll!![1][3])
+                        tab.select()
+                        vp.currentItem = 1
+                        infoEstiTime2.text = secToMin(infoArrAll!![1][0])
+                        infoFare2.text = "${infoArrAll!![1][2]}"
+                        infoTrans2.text = "${infoArrAll!![1][3]}"
                     }
                     2 -> {
-                        vp.setCurrentItem(2)
-                        infoEstiTime3.setText(secToMin(infoArrAll!![2][0]))
-                        infoFare3.setText(infoArrAll!![2][2])
-                        infoTrans3.setText(infoArrAll!![2][3])
+                        tab.select()
+                        vp.currentItem = 2
+                        infoEstiTime3.text = secToMin(infoArrAll!![2][0])
+                        infoFare3.text = "${infoArrAll!![2][2]}"
+                        infoTrans3.text = "${infoArrAll!![2][3]}"
                     }
-                    else -> {}
                 }
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {
