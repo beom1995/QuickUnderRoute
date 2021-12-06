@@ -31,7 +31,6 @@ public class FavoritesActivity extends Activity {
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(FavoritesActivity.this,
                 android.R.layout.simple_list_item_1,items);
 
-        btnInit = (Button)findViewById(R.id.btnInit);
         listView = (ListView) findViewById(R.id.listview1);
         listView.setAdapter(adapter);
 
@@ -71,16 +70,6 @@ public class FavoritesActivity extends Activity {
             adapter.notifyDataSetChanged();
         }
         adapter.notifyDataSetChanged();
-
-        //초기화 버튼//개발자를 위한 버튼//곧 삭제 예정
-        btnInit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                editor.putInt("num", 0);
-                editor.commit();
-                Toast.makeText(FavoritesActivity.this, "초기화 되었습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         //즐겨찾기 항목을 누르면 해당 역 정보로 이동
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
