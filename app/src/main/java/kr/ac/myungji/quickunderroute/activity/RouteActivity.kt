@@ -12,6 +12,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
@@ -34,15 +36,15 @@ class RouteActivity : AppCompatActivity() {
         val fragFare = layoutInflater.inflate(R.layout.fragment_tab_fare, null, false)
 
         // 정보를 표시할 화면 요소
-        val infoEstiTime1: TextView = fragTime.findViewById(R.id.info_time1)
-        val infoEstiTime2: TextView = fragDist.findViewById(R.id.info_time2)
-        val infoEstiTime3: TextView = fragFare.findViewById(R.id.info_time3)
-        val infoFare1: TextView = fragTime.findViewById(R.id.info_fare1)
-        val infoFare2: TextView = fragDist.findViewById(R.id.info_fare2)
-        val infoFare3: TextView = fragFare.findViewById(R.id.info_fare3)
-        val infoTrans1: TextView = fragTime.findViewById(R.id.info_trans1)
-        val infoTrans2: TextView = fragDist.findViewById(R.id.info_trans2)
-        val infoTrans3: TextView = fragFare.findViewById(R.id.info_trans3)
+        var infoEstiTime1: TextView = fragTime.findViewById(R.id.info_time1)
+        var infoEstiTime2: TextView = fragDist.findViewById(R.id.info_time2)
+        var infoEstiTime3: TextView = fragFare.findViewById(R.id.info_time3)
+        var infoFare1: TextView = fragTime.findViewById(R.id.info_fare1)
+        var infoFare2: TextView = fragDist.findViewById(R.id.info_fare2)
+        var infoFare3: TextView = fragFare.findViewById(R.id.info_fare3)
+        var infoTrans1: TextView = fragTime.findViewById(R.id.info_trans1)
+        var infoTrans2: TextView = fragDist.findViewById(R.id.info_trans2)
+        var infoTrans3: TextView = fragFare.findViewById(R.id.info_trans3)
 
         // 경로 검색 정보 받아오기
         var src: Int = MyApplication.prefs.getInt("src", 0)
@@ -75,6 +77,9 @@ class RouteActivity : AppCompatActivity() {
         // tabLayout에서 viewpaging 사용
         var vp: ViewPager = findViewById(R.id.view_pager)
         var adapter: VPAdapter = VPAdapter(supportFragmentManager)
+        adapter.addFragment(tab_time(), "최단시간")
+        adapter.addFragment(tab_dist(), "최단거리")
+        adapter.addFragment(tab_fare(), "최소요금")
         vp.adapter = adapter
 
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
@@ -85,25 +90,22 @@ class RouteActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when(tab.position){
                     0 -> {
-                        tab.select()
                         vp.currentItem = 0
-                        infoEstiTime1.text = secToMin(infoArrAll!![0][0])
-                        infoFare1.text = "${infoArrAll!![0][2]}"
-                        infoTrans1.text = "${infoArrAll!![0][3]}"
+                        infoEstiTime1.setText(secToMin(infoArrAll!![0][0]))
+                        infoFare1.setText("${infoArrAll!![0][2]}")
+                        infoTrans1.setText("${infoArrAll!![0][3]}")
                     }
                     1 -> {
-                        tab.select()
                         vp.currentItem = 1
-                        infoEstiTime2.text = secToMin(infoArrAll!![1][0])
-                        infoFare2.text = "${infoArrAll!![1][2]}"
-                        infoTrans2.text = "${infoArrAll!![1][3]}"
+                        infoEstiTime2.setText(secToMin(infoArrAll!![1][0]))
+                        infoFare2.setText("${infoArrAll!![1][2]}")
+                        infoTrans2.setText("${infoArrAll!![1][3]}")
                     }
                     2 -> {
-                        tab.select()
                         vp.currentItem = 2
-                        infoEstiTime3.text = secToMin(infoArrAll!![2][0])
-                        infoFare3.text = "${infoArrAll!![2][2]}"
-                        infoTrans3.text = "${infoArrAll!![2][3]}"
+                        infoEstiTime3.setText(secToMin(infoArrAll!![2][0]))
+                        infoFare3.setText("${infoArrAll!![2][2]}")
+                        infoTrans3.setText("${infoArrAll!![2][3]}")
                     }
                 }
             }

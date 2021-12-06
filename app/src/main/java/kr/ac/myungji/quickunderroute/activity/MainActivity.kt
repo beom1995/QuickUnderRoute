@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // 검색버튼 클릭동작
         var btnSearch: ImageView = findViewById(R.id.btn_search)
         btnSearch.setOnClickListener {
-            val searchNo = autoCompleteTextView.text.toString();
+            val searchNo = autoCompleteTextView.text.toString()
             val intent = Intent(this, StationActivity::class.java)
             for (i in stationList!!.indices) {
                 if (searchNo == stNo[i]) {
