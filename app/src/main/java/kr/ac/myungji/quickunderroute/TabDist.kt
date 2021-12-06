@@ -20,12 +20,6 @@ class TabDist : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var time: String? = null
-    private var dist: String? = null
-    private var fare: String? = null
-    private var trans: String? = null
-    private var route: String? = null
-
     private lateinit var infoTime: TextView
     private lateinit var infoDist: TextView
     private lateinit var infoFare: TextView
@@ -38,13 +32,6 @@ class TabDist : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
-
-            time = it.getString("time")
-            dist = it.getString("dist")
-            fare = it.getString("fare")
-            trans = it.getString("trans")
-            route = it.getString("routeString")
-
         }
     }
 
@@ -60,11 +47,12 @@ class TabDist : Fragment() {
         infoTrans = v.findViewById(R.id.info_trans2)
         infoRoute = v.findViewById(R.id.info_route2)
 
-        infoTime.text = time
-        infoDist.text = dist
-        infoFare.text = fare
-        infoTrans.text = trans
-        infoRoute.text = route
+        infoTime.text = MyApplication.prefs.getString("time2", null)
+        infoDist.text = MyApplication.prefs.getString("dist2", null)
+        infoFare.text = MyApplication.prefs.getString("fare2", null)
+        infoTrans.text = MyApplication.prefs.getString("trans2", null)
+        infoRoute.text = MyApplication.prefs.getString("route2", null)
+
         return v
     }
 
@@ -77,7 +65,6 @@ class TabDist : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment tab_dist.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             TabDist().apply {

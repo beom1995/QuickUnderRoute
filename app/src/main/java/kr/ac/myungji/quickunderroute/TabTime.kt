@@ -1,6 +1,7 @@
 package kr.ac.myungji.quickunderroute
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,12 +21,6 @@ class TabTime : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var time: String? = null
-    private var dist: String? = null
-    private var fare: String? = null
-    private var trans: String? = null
-    private var route: String? = null
-
     private lateinit var infoTime: TextView
     private lateinit var infoDist: TextView
     private lateinit var infoFare: TextView
@@ -37,11 +32,6 @@ class TabTime : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
-            time = it.getString("time")
-            dist = it.getString("dist")
-            fare = it.getString("fare")
-            trans = it.getString("trans")
-            route = it.getString("routeString")
         }
     }
 
@@ -57,11 +47,15 @@ class TabTime : Fragment() {
         infoTrans = v.findViewById(R.id.info_trans1)
         infoRoute = v.findViewById(R.id.info_route1)
 
-        infoTime.text = time
-        infoDist.text = dist
-        infoFare.text = fare
-        infoTrans.text = trans
-        infoRoute.text = route
+        infoTime.text = MyApplication.prefs.getString("time1", null)
+        infoDist.text = MyApplication.prefs.getString("dist1", null)
+        infoFare.text = MyApplication.prefs.getString("fare1", null)
+        infoTrans.text = MyApplication.prefs.getString("trans1", null)
+        infoRoute.text = MyApplication.prefs.getString("route1", null)
+
+        MyApplication.prefs.getString("time1", null)?.let { Log.d("TTTTTTTTTTT1", it) }
+
+
         return v
     }
 

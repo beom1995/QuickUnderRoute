@@ -1,6 +1,7 @@
 package kr.ac.myungji.quickunderroute
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,12 +21,6 @@ class TabFare : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var time: String? = null
-    private var dist: String? = null
-    private var fare: String? = null
-    private var trans: String? = null
-    private var route: String? = null
-
     private lateinit var infoTime: TextView
     private lateinit var infoDist: TextView
     private lateinit var infoFare: TextView
@@ -38,13 +33,6 @@ class TabFare : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
-
-            time = it.getString("time")
-            dist = it.getString("dist")
-            fare = it.getString("fare")
-            trans = it.getString("trans")
-            route = it.getString("routeString")
-
         }
     }
 
@@ -60,11 +48,12 @@ class TabFare : Fragment() {
         infoTrans = v.findViewById(R.id.info_trans3)
         infoRoute = v.findViewById(R.id.info_route3)
 
-        infoTime.text = time
-        infoDist.text = dist
-        infoFare.text = fare
-        infoTrans.text = trans
-        infoRoute.text = route
+        infoTime.text = MyApplication.prefs.getString("time3", null)
+        infoDist.text = MyApplication.prefs.getString("dist3", null)
+        infoFare.text = MyApplication.prefs.getString("fare3", null)
+        infoTrans.text = MyApplication.prefs.getString("trans3", null)
+        infoRoute.text = MyApplication.prefs.getString("route3", null)
+
         return v
     }
 

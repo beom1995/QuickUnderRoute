@@ -98,7 +98,6 @@ class RouteActivity : AppCompatActivity() {
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
         tabLayout.setupWithViewPager(vp)
 
-
         // 각 탭별 화면 설정
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -107,10 +106,10 @@ class RouteActivity : AppCompatActivity() {
                         tab.select()
                         vp.currentItem = TIME
 
-                        val time: String = secToMin(infoArrAll!![0][0])
-                        val dist: String = "${infoArrAll!![0][1]}"
-                        val fare: String = "${infoArrAll!![0][2]}"
-                        val trans: String = "${infoArrAll!![0][3]}"
+                        val time: String = secToMin(infoArrAll!![TIME][0])
+                        val dist: String = "${infoArrAll!![TIME][1]}"
+                        val fare: String = "${infoArrAll!![TIME][2]}"
+                        val trans: String = "${infoArrAll!![TIME][3]}"
 
                         var routeString: String? = null
 
@@ -118,22 +117,20 @@ class RouteActivity : AppCompatActivity() {
                             routeString.plus("${infoRoute!![TIME][e]}"+"\n")
                         }
 
-                        bundleTime.putString("time", time)
-                        bundleTime.putString("dist", dist)
-                        bundleTime.putString("fare", fare)
-                        bundleTime.putString("trans", trans)
-                        bundleTime.putString("route", routeString)
-                        fragTime.arguments = bundleTime
-
+                        MyApplication.prefs.setString("time1", time)
+                        MyApplication.prefs.setString("dist1", dist)
+                        MyApplication.prefs.setString("fare1", fare)
+                        MyApplication.prefs.setString("trans1", trans)
+                        MyApplication.prefs.setString("route1", routeString)
                     }
                     DIST -> {
                         tab.select()
-                        vp.currentItem = 1
+                        vp.currentItem = DIST
 
-                        val time: String = secToMin(infoArrAll!![1][0])
-                        val dist: String = "${infoArrAll!![1][1]}"
-                        val fare: String = "${infoArrAll!![1][2]}"
-                        val trans: String = "${infoArrAll!![1][3]}"
+                        val time: String = secToMin(infoArrAll!![DIST][0])
+                        val dist: String = "${infoArrAll!![DIST][1]}"
+                        val fare: String = "${infoArrAll!![DIST][2]}"
+                        val trans: String = "${infoArrAll!![DIST][3]}"
 
                         var routeString: String? = null
 
@@ -141,22 +138,20 @@ class RouteActivity : AppCompatActivity() {
                             routeString.plus("${infoRoute!![DIST][e]}"+"\n")
                         }
 
-                        bundleDist.putString("time", time)
-                        bundleDist.putString("dist", dist)
-                        bundleDist.putString("fare", fare)
-                        bundleDist.putString("trans", trans)
-                        bundleDist.putString("route", routeString)
-                        fragDist.arguments = bundleDist
-
+                        MyApplication.prefs.setString("time2", time)
+                        MyApplication.prefs.setString("dist2", dist)
+                        MyApplication.prefs.setString("fare2", fare)
+                        MyApplication.prefs.setString("trans2", trans)
+                        MyApplication.prefs.setString("route2", routeString)
                     }
                     FARE -> {
                         tab.select()
-                        vp.currentItem = 2
+                        vp.currentItem = FARE
 
-                        val time: String = secToMin(infoArrAll!![2][0])
-                        val dist: String = "${infoArrAll!![2][1]}"
-                        val fare: String = "${infoArrAll!![2][2]}"
-                        val trans: String = "${infoArrAll!![2][3]}"
+                        val time: String = secToMin(infoArrAll!![FARE][0])
+                        val dist: String = "${infoArrAll!![FARE][1]}"
+                        val fare: String = "${infoArrAll!![FARE][2]}"
+                        val trans: String = "${infoArrAll!![FARE][3]}"
 
                         var routeString: String? = null
 
@@ -164,13 +159,11 @@ class RouteActivity : AppCompatActivity() {
                             routeString.plus("${infoRoute!![FARE][e]}"+"\n")
                         }
 
-                        bundleFare.putString("time", time)
-                        bundleFare.putString("dist", dist)
-                        bundleFare.putString("fare", fare)
-                        bundleFare.putString("trans", trans)
-                        bundleFare.putString("route", routeString)
-                        fragFare.arguments = bundleFare
-
+                        MyApplication.prefs.setString("time3", time)
+                        MyApplication.prefs.setString("dist3", dist)
+                        MyApplication.prefs.setString("fare3", fare)
+                        MyApplication.prefs.setString("trans3", trans)
+                        MyApplication.prefs.setString("route3", routeString)
                     }
                 }
             }
