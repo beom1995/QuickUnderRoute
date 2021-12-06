@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.webkit.*
 import android.widget.*
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //최초 실행 확인
+        // 어플 최초 구동 확인 및 상태 저장
         val pref = getSharedPreferences("pref", MODE_PRIVATE)
         val first = pref.getBoolean("isFirst", false)
         if (first == false) {
@@ -75,6 +76,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             editor.putInt("timeDelete",0)
             editor.commit()
         }
+
+        // 액션바(타이틀바) 없애기
+        var actionBar: ActionBar? = supportActionBar
+        actionBar?.hide()
 
         // drawerlayout 사용을 위한 toolbar 설정
         toolbar = findViewById(R.id.main_toolbar)
@@ -92,7 +97,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
 
         // 지하철 노선도 연결
-        webView = findViewById(R.id.webView)        // html로 UI를 구현하기 위해서 사용
+        webView = findViewById(R.id.web_view)        // html로 UI를 구현하기 위해서 사용
         webView.addJavascriptInterface(WebViewConnector(this), "Android")
 
         webView.apply {
@@ -138,7 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             settings.useWideViewPort = true
             settings.setSupportZoom(true)
             settings.builtInZoomControls = true
-            settings.displayZoomControls = false
+            settings.displayZoomControls = true
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
             settings.domStorageEnabled = true
 
@@ -212,10 +217,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // 메뉴 네비게이션 목록과 선택 시 기능
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.btn_test -> {
-                val intent = Intent(this, RouteActivity::class.java)
-                startActivity(intent)
-            }
             R.id.btn_fav -> {
                 val intent = Intent(this, FavoritesActivity::class.java)
                 startActivity(intent)

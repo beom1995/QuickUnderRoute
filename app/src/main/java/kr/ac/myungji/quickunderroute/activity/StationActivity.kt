@@ -1,5 +1,6 @@
 package kr.ac.myungji.quickunderroute.activity
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -8,22 +9,22 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kr.ac.myungji.quickunderroute.MainActivity
+import kr.ac.myungji.quickunderroute.MyApplication
 import kr.ac.myungji.quickunderroute.R
-
 
 class StationActivity : AppCompatActivity() {
     lateinit var btnLine1:Button
     lateinit var btnLine2:Button
+
+    lateinit var btnSrcSt: Button
+    lateinit var btnViaSt: Button
+    lateinit var btnDstnSt: Button
+
+    lateinit var btnFavorites:Button
+
     lateinit var TextPreviousST:TextView
     lateinit var TextNowST:TextView
     lateinit var TextAfterST:TextView
-    lateinit var btnStartST:Button
-    lateinit var btnStopOverST:Button
-    lateinit var btnArrivalST:Button
-    lateinit var btnFavorites:Button
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +35,12 @@ class StationActivity : AppCompatActivity() {
         TextPreviousST = findViewById(R.id.textPreviousST)
         TextNowST = findViewById(R.id.textNowST)
         TextAfterST = findViewById(R.id.textAfterST)
-        btnStartST = findViewById(R.id.btnStartST)
-        btnStopOverST = findViewById(R.id.btnStopOverST)
-        btnArrivalST = findViewById(R.id.btnArrivalST)
+        btnSrcSt = findViewById(R.id.btnSrcSt)
+        btnViaSt = findViewById(R.id.btnViaSt)
+        btnDstnSt = findViewById(R.id.btnDstnSt)
         btnFavorites = findViewById(R.id.btnFavorites)
 
         val no = getIntent().getStringExtra("no")
-
-        //Toast.makeText(this, no.toString(), Toast.LENGTH_SHORT).show()
 
         //역 배열
         var array = arrayOf(
@@ -183,9 +182,7 @@ class StationActivity : AppCompatActivity() {
         var STnum2 = arrayOf(0, 0);
         var numSTLine = 0
 
-
         var noText = no.toString()
-
         var nowST = noText //현재역
 
 
@@ -238,10 +235,10 @@ class StationActivity : AppCompatActivity() {
             btnLine2.visibility = View.VISIBLE
             btnLine2.setText(STline2.toString())
         }
-//
+
         TextPreviousST.setText(CheckEnd(previousST))
         TextAfterST.setText(CheckEnd(afterST))
-//
+
           btnLine1.setOnClickListener(View.OnClickListener {
               if (STnum2[0] - 1 < 0) {
                   if (STnum[0] == 0 || STnum[0] == 5) {
@@ -298,9 +295,45 @@ class StationActivity : AppCompatActivity() {
             btnLine1.setBackgroundColor(Color.parseColor("white"))
         })
 
-          //현재 역
-          TextNowST.setText(nowST)
+        //현재 역
+        TextNowST.setText(nowST)
 
+        // 출발, 도착역 설정 정보가 있는 지 확인
+        var src: Int = MyApplication.prefs.getInt("src", 0)
+        var dstn: Int = MyApplication.prefs.getInt("dstn", 0)
+
+        // 출발역 버튼 클릭시
+        btnSrcSt.setOnClickListener {
+            MyApplication.prefs.setInt("src", nowST.toInt())
+            if(dstn != 0) {
+                val intent = Intent(this, RouteActivity::class.java)
+                startActivity(intent)
+            } else {
+                finish()
+            }
+        }
+
+        // 경유역 버튼 클릭시
+        btnViaSt.setOnClickListener {
+            MyApplication.prefs.setString("via", nowST)
+            if(src != 0 && dstn != 0) {
+                val intent = Intent(this, RouteActivity::class.java)
+                startActivity(intent)
+            } else {
+                finish()
+            }
+        }
+
+        // 도착역 버튼 클릭시
+        btnDstnSt.setOnClickListener {
+            MyApplication.prefs.setInt("dstn", nowST.toInt())
+            if(src != 0) {
+                val intent = Intent(this, RouteActivity::class.java)
+                startActivity(intent)
+            } else {
+                finish()
+            }
+        }
 
         btnFavorites.setOnClickListener(View.OnClickListener {
             val pref = getSharedPreferences("pref", MODE_PRIVATE)
@@ -308,8 +341,8 @@ class StationActivity : AppCompatActivity() {
 
             var num = pref.getInt("num",0)
             editor.putString("numST"+num, noText)
-            Toast.makeText(this, "즐겨찾기 등록되었습니다.", Toast.LENGTH_SHORT).show()
-            num++;
+            Toast.makeText(this, "즐겨찾기에 등록되었습니다.", Toast.LENGTH_SHORT).show()
+            num++
             editor.putInt("num",num++)
             editor.commit()
         })

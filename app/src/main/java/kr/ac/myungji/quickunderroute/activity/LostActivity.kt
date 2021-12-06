@@ -16,7 +16,7 @@ class LostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lost)
 
-        webView = findViewById(R.id.webView)        // html로 UI를 구현하기 위해서 사용
+        webView = findViewById(R.id.web_view)        // html로 UI를 구현하기 위해서 사용
 
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = WebViewClient()

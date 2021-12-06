@@ -71,21 +71,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/btnStartST"
+            android:id="@+id/btnSrcSt"
             android:text="출발역"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/btnStopOverST"
+            android:id="@+id/btnViaSt"
             android:text="경유역"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/btnArrivalST"
+            android:id="@+id/btnDstnSt"
             android:text="도착역"/>
     </LinearLayout>
 
