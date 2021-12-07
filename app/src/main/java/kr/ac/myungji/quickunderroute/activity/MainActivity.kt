@@ -238,7 +238,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
             }
             R.id.btn_settings -> {
-                displayMessage("settings selected")
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
             }
         }
         drawerLayout.closeDrawers()

@@ -27,9 +27,9 @@ public class NoticeActivity extends Activity {
         listView = (ListView) findViewById(R.id.listview2);
         listView.setAdapter(adapter);
 
-        items.add("공지사항1");
-        items.add("공지사항2");
-        items.add("공지사항3");
+        items.add("지하철 길찾기가 완성되었습니다!");
+        items.add("업데이트 공지:12/7 12:00am");
+        items.add("버그 발견 시 개발자에게 메일을 보내주세요");
 
         adapter.notifyDataSetChanged();
     }
